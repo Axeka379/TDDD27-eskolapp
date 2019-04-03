@@ -75,7 +75,7 @@ class PasswordResetConfirmTests(TestCase):
         user = User.objects.create_user(username='john', email='john@doe.com', password='123abcdef')
 
         #Create valid passwor reset token
-        self.uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        self.uid = urlsafe_base64_encode(force_bytes(user.pk))
         self.token = default_token_generator.make_token(user)
         url = reverse('password_reset_confirm', kwargs={'uidb64': self.uid, 'token': self.token})
         self.response = self.client.get(url, follow=True)
@@ -101,7 +101,7 @@ class PasswordResetConfirmTests(TestCase):
 class InvalidPasswordResetTests(TestCase):
     def setUp(self):
         user = User.objects.create_user(username='john', email='john@doe.com', password='123abcdef')
-        self.uid = urlsafe_base64_encode(force_bytes(user.pk)).decode()
+        self.uid = urlsafe_base64_encode(force_bytes(user.pk))
         self.token = default_token_generator.make_token(user)
 
         #invalidate the token
