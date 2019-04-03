@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'widget_tweaks',
+    'channels',
 
     'accounts',
     'chat'
@@ -75,6 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'eskolapp.wsgi.application'
+ASGI_APPLICATION = 'eskolapp.routing.application'
 
 
 # Database
