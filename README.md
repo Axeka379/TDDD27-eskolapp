@@ -27,3 +27,9 @@ sudo docker run -p 6379:6379 -d redis:2.8
 
 python eskolapp/manange.py runserver
 ```
+
+### Testing
+```
+python eskolapp/manange.py test
+```
+Websocket testing requires Chromedriver. Download from https://sites.google.com/a/chromium.org/chromedriver/downloads and save as /eskolapp/live/chromedriver.
