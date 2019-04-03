@@ -17,3 +17,13 @@ The application can be seen as something similar to **Twitch** with the addition
 The **backend** of the system will be using **_Django_** and will also be complemented with **_Bootstrap_** and such. Testing can be done inside **_Django_** unless no other, more suitable, option comes up.
 
 For the **frontend**, the framwork that is considered for the moment is **_Electron_**. Since it has been used previousley to develope similar apps like **Skype**, **Slack** and **Discord** for example, it seems most efficient. Other framworks that have been considered are **_Angular_** and **_Vue_**.
+
+### Setup
+```
+virtualenv venv -p python3.6
+source venv/bin/activate
+
+sudo docker run -p 6379:6379 -d redis:2.8
+
+python eskolapp/manange.py runserver
+```
