@@ -2,7 +2,7 @@
 from django.urls import resolve, reverse
 from django.test import TestCase
 from django.contrib.auth.models import User
-from ..views import home, board_topics, new_topic
+from ..views import board_topics, new_topic
 from ..models import Board, Topic, Post
 from ..forms import NewTopicForm
 
@@ -37,6 +37,5 @@ class BoardTopicsTests(TestCase):
         new_topic_url = reverse('new_topic', kwargs={'pk': 1})
 
         response = self.client.get(board_topics_url)
-
         self.assertContains(response, 'href="{0}"'.format(homepage_url))
         self.assertContains(response, 'href="{0}"'.format(new_topic_url))
