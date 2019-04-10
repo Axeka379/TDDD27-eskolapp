@@ -7,10 +7,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
 
         # Join room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
+        try:
+            await self.channel_layer.group_add(
+                self.room_group_name,
+                self.channel_name
+            )
+        except OSError:
+            print('\033[91m')
+            print('Måns says: Did you forgot to start the Redis server?')
+            print('sudo docker run -p 6379:6379 -d redis:2.8')
+            print('\033[0m')
 
         await self.accept()
 
