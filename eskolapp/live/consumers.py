@@ -1,7 +1,7 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-
+from datetime import datetime
 import json
 
 
@@ -23,6 +23,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
             print('\033[0m')
 
         await self.accept()
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message' : '"connected to the server"',
+                'sender' : self.user.username
+            }
+
+        ) # TODO: Display the message time!
+
+
 
     async def disconnect(self, close_code):
         # Leave room group
@@ -30,14 +41,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message' : '"disconnected from the server"',
+                'sender' : self.user.username
+            }
+        )
     # Receive message from WebSocket
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         username_str = None
         username = self.scope['user']
         message = text_data_json['message']
-        sender = username.username
+        sender = username.username #TODO: This can be changed to id later...
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -51,8 +69,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from room group
     async def chat_message(self, event):
 
+        date = datetime.today().strftime('%Y-%m-%d') + ": " 
+
         message = event['message']
-        sender = event['sender']
+        sender = date + event['sender']
         package = {
             'message' : message,
             'sender' : sender
