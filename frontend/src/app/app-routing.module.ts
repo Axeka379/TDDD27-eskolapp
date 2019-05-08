@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { UsersComponent } from './users/users.component';
 import { DetailsComponent } from './details/details.component';
 import { PostsComponent } from './posts/posts.component';
+import { ChatWindowComponent } from './chat-window/chat-window.component';
 
 const routes: Routes = [
 	{
 		path: '',
-		component: UsersComponent
+		component: ChatWindowComponent
 	},
 	{
 		path: 'details/:id',
@@ -16,6 +17,10 @@ const routes: Routes = [
 	{
 		path: 'posts',
 		component: PostsComponent
+	},
+	{
+		path: 'users',
+		component: UsersComponent
 	},
 	{
 		path: '**',

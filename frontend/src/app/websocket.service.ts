@@ -21,7 +21,7 @@ export class WebsocketService {
 		if (closed) {
 			//this._subject = this.create(this.url);
 			this._subject = new WebSocketSubject(this.url);
-			console.log("Successfully connected: " + this.url);
+			console.log("Connected!");
 		}
 		return this._subject;
 	}
@@ -33,7 +33,6 @@ export class WebsocketService {
 	*/
 
 	send(data: Object) {
-		console.log(this.subject);
 		this.subject.next(data);
 	}
 

@@ -1,63 +1,35 @@
-<button (click)="sendMsg()">Send Message</button>
+<div class="chatWrapper flex-grow-1">
+	<div class="my-3 p-3 bg-white rounded shadow-sm">
 
+		<div *ngFor="let msg of messages" [ngSwitch]="msg.type">
 
-<div class='chatWrapper flex-grow-1 mh-100' style="width: 800px; height: 500px; background: red;">
-	<div class='chatMessages'>
-		<div class='msgBox' *ngFor="let msg of messages">
-			{{ msg.author }}: {{ msg.message }}
-			<!-- Message
-			<span v-if="msg.msg_type === 0" class='message'>
-				<span class='msgUsername'>[[msg.username]]</span>:
-				<span class='msgBody'>[[msg.message]]</span>
-			</span>
-			<!-- Warning / Advice messages
-			<span v-else-if="msg.msg_type === 1" class='contextual-message text-warning'>
-				[[msg.message]]
-			</span>
-			<!-- Alert / Danger messages
-			<span v-else-if="msg.msg_type === 2" class='contextual-message text-danger'>
-				[[msg.message]]
-			</span>
-			<!-- "Muted" messages
-			<span v-else-if="msg.msg_type === 3" class='contextual-message text-muted'>
-				[[msg.message]]
-			</span>
-			<!-- User joined table
-			<span v-else-if="msg.msg_type === 4" class='contextual-message text-muted'>
-				[[msg.username]] joined the table!
-			</span>
-			<!-- User left table
-			<span v-else-if="msg.msg_type === 5" class='contextual-message text-muted'>
-				[[msg.username]] left the table!
-			</span>
-			<!-- User left table
-			<span v-else class='contextual-message text-danger'>
-				[[msg.message]]
-			</span>-->
-		</div>
-	</div>
-	<form class="chatForm" v-on:submit="sendMessage($event)">
-		<input class="chatInput" placeholder="message">
-		<button class="chatSubmit"><i class="fa fa-caret-right"></i></button>
-	</form>
-</div>
-
-<!--
-<div id="message-area">
-	<div id="message-id-123">
-		<div id="container">
-			<div class="row">
-				<div class="col-xs-6 col-md-3">
-					<a href="#" class="person-one thumbnail">
-						<img class="person-img-one" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/827672/pexels-photo-119705%20(1).jpeg">
-					</a>
+			<div class="msgBox" *ngSwitchCase="'message'">
+				<img src="{{ msg.image }}" width="44" height="44" />
+				<div class="msgContent">
+					<div class="msgHeader">
+						<span class="text-muted mr-1"><small>{{ msg.timestamp | date: "shortTime" }}</small></span>
+						<span class="font-weight-bold">{{ msg.author }}</span>
+					</div>
+					<span class="msgText">{{ msg.content }}</span>
 				</div>
 			</div>
+
+			<div class="msgBox" *ngSwitchCase="'join'">
+				<div class="msgContent">
+					<div class="msgHeader"></div>
+					<span class="msgText">{{ msg.author }} join the room</span>
+				</div>
+			</div>
+
+			<div class="msgBox" *ngSwitchCase="'leave'">
+				<div class="msgContent">
+					<div class="msgHeader"></div>
+					<span class="msgText">{{ msg.author }} left the room</span>
+				</div>
+			</div>
+
 		</div>
-		<div id="container"> 
-			<h4 id="person-name">Jsmith<span id="time">9:02 AM</span></h4>
-			<h5 id="person-text">Morning everyone!</h5>
-		</div>
+
+		<app-chat-form></app-chat-form>
 	</div>
 </div>
--->

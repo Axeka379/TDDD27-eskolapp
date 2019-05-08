@@ -22,6 +22,7 @@ For the **frontend**, the framwork that is considered for the moment is **_Elect
 ```
 virtualenv venv -p python3.6
 source venv/bin/activate
+pip install -r requirements.txt
 
 sudo docker run -p 6379:6379 -d redis:2.8
 

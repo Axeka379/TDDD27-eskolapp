@@ -9,10 +9,16 @@ export interface Message {
 
 @Injectable()
 export class ChatService {
-	public messages: Subject<Message>;
+	public serverList: string[] = [];
+	public selectedServer: string;
+
+	public messageList: any[] = []; // <Message>
 	private messageSubject: Subject<any>;
 
+
 	constructor(private wsService: WebsocketService) {
+		this.serverList.push("Server 1");
+		this.serverList.push("My Thing");
 		//wsService.connect(CHAT_URL);
 		/*
 		wsService.onMessage$.subscribe(
@@ -27,7 +33,7 @@ export class ChatService {
 		wsService.subject.subscribe(
 			// Called whenever there is a message from the server.
 			(msg) => {
-				this.messageSubject.next(msg);
+				this.onData(msg);
 			},
 			// Called if at any point WebSocket API signals some kind of error.
 			(err: Event) => {
@@ -40,7 +46,6 @@ export class ChatService {
 			}
 		);
 
-		this.sendMessage("golen", "hello world");
 		/*this.messages = <Subject<Message>>wsService.connect(CHAT_URL).map(
 			(response: MessageEvent): Message => {
 				let data = JSON.parse(response.data);
@@ -56,14 +61,90 @@ export class ChatService {
 		return this.messageSubject.asObservable();
 	}
 
-	public sendMessage(author: string, message: string) {
+	public sendMessage(message: string) {
 		this.wsService.send(
 			{
-				"author": author,
-				"message": message
+				"type": "message",
+				"content": message
 			}
 		);
 	}
 
-	listenToMessages
+
+	// TODO: Move to service?
+	private getUserName(user_id) {
+		return "Name#" + user_id;
+	}
+	private getUserImage(user_id) {
+		let url = "http://identicon.org/?t={id}&s=256";
+		url = url.replace("{id}", user_id);
+		//url = url.replace("{size}", Math.max(element.width, element.height));
+		return url;
+	}
+
+	private onData(message) {
+		let type = message.type;
+		if (type == 'message') {
+			this.onMessage(message);
+		}
+		else if (type == 'join') {
+			this.onJoin(message);
+		}
+		else if (type == 'leave') {
+			this.onLeave(message);
+		}
+	}
+
+	private onMessage(message) {
+		let type = message.type;
+		let server_id = message.server_id;
+		let author = this.getUserName(message.user_id);
+		let msg_id = message.msg_id;
+		let timestamp = message.timestamp;
+		let content = message.content || "<content>";
+
+		let image = this.getUserImage(message.user_id);
+
+		this.messageList.push({
+			type,
+			server_id,
+			author,
+			msg_id,
+			image,
+			timestamp,
+			content,
+		});
+	}
+
+	private onJoin(message) {
+		let type = message.type;
+		let server_id = message.server_id;
+		let author = this.getUserName(message.user_id);
+		let msg_id = message.msg_id;
+		let timestamp = message.timestamp;
+
+		this.messageList.push({
+			type,
+			server_id,
+			author,
+			msg_id,
+			timestamp,
+		});
+	}
+
+	private onLeave(message) {
+		let type = message.type;
+		let server_id = message.server_id;
+		let author = this.getUserName(message.user_id);
+		let msg_id = message.msg_id;
+		let timestamp = message.timestamp;
+
+		this.messageList.push({
+			type,
+			server_id,
+			author,
+			msg_id,
+			timestamp,
+		});
+	}
 }
