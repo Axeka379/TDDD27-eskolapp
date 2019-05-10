@@ -13,11 +13,17 @@ nav {
                 color: #fff;
                 padding: 20px;
                 display: block;
+                vertical-align: text-bottom;
+                cursor: pointer;
             }
 
             .activated {
                 background-color: #00a8ff;
             }
+        }
+
+        li:hover {
+            background: #5D5E5E;
         }
     }
     

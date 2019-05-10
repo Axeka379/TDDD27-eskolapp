@@ -37,7 +37,7 @@
             else {
                 var msg_id = data['msg_id']
                 var content = data['content']
-                var timestamp = new Date(data['timestamp']*1000)
+                var timestamp = new Date(data['timestamp'])
                 var timestring = timestamp.getHours() + ':' + timestamp.getMinutes()
                 document.querySelector('#chat-log').value += (timestring + ' ' + user_id + ': ' + content + '\n');
             }
