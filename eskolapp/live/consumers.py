@@ -3,10 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 import json, time
 
-# TODO:
-#   * Setup json protocol to send to frontend. (get_user?????)
-#   * Send user information that is useful.
-
 class ChatConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
@@ -91,6 +87,18 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
         """
 
+
+    async def on_fetch_server_users(self, server):
+        await self.channel_layer.group_send(
+        self.room_group_name,
+            {
+                'type': 'fetch_server_users',
+                'user_id' : [user.id for user in server.get_user()]
+            }
+        )
+        pass
+
+
     async def send_join(self, event):
         await self.send_json({
             'type' : 'join',
@@ -110,4 +118,10 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         await self.send_json({
             'type' : 'leave',
             'user_id'   : event['user_id']
+        })
+
+    async def fetch_server_users(self, event):
+        await self.send_json({
+            'type: server_user_list'
+            'user_id' : event['user_id']
         })

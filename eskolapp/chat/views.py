@@ -4,16 +4,19 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.views.generic import UpdateView, ListView
 from django.utils import timezone
-
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 from .models import Board, Topic, Post
 from .forms import NewTopicForm, PostForm
+
 
 class BoardListView(ListView):
     model = Board
     context_object_name = 'boards'
     template_name = 'home.html'
-
+    user = get_user_model()
 def board_topics(request, pk):
     board = get_object_or_404(Board, pk=pk)
     topics = board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
