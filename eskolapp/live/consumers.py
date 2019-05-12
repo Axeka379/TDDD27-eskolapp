@@ -150,6 +150,19 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
         """
 
+    async def send_presence(self, event):
+        pass
+        """
+        await self.send_json({
+            'type': 'message',
+            'server_id': event['server_id'],
+            'user_id': event['user_id'],
+            'msg_id': event['msg_id'],
+            'timestamp': event['timestamp'],
+            'content': event['content'],
+        })
+        """
+
 
     async def on_fetch_server_users(self, server):
         await self.channel_layer.group_send(
@@ -160,28 +173,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             }
         )
         pass
-
-
-    async def send_join(self, event):
-        await self.send_json({
-            'type' : 'join',
-            'user_id'   : event['user_id']
-        })
-
-    async def send_message(self, event):
-        await self.send_json({
-            'type' : 'message',
-            'user_id'   : event['user_id'],
-            'msg_id' : event['msg_id'],
-            'content' : event['content'],
-            'timestamp' : event['timestamp']
-        })
-
-    async def send_leave(self, event):
-        await self.send_json({
-            'type' : 'leave',
-            'user_id'   : event['user_id']
-        })
 
     async def fetch_server_users(self, event):
         await self.send_json({

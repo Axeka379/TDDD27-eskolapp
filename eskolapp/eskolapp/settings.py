@@ -38,10 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
     'corsheaders',
     'widget_tweaks',
     'channels',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
     'accounts',
     'chat',
     'live'
@@ -57,6 +63,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 ROOT_URLCONF = 'eskolapp.urls'
 
 TEMPLATES = [
@@ -154,8 +167,14 @@ LOGIN_REDIRECT_URL = 'home'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'login'
 AUTH_USER_MODEL = 'live.User'
+
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:4200',
-    'https://localhost:4200',
+    "http://localhost:8000",
+    "https://localhost:8000",
+    "http://localhost:4200",
+    "https://localhost:4200",
 ]
+
+USE_X_FORWARDED_HOST = True
+
 SITE_ID = 1

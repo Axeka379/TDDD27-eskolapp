@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ChatService } from "../chat.service";
 import { WebsocketService } from "../websocket.service";
 
@@ -9,16 +10,28 @@ import { WebsocketService } from "../websocket.service";
 })
 export class ChatWindowComponent implements OnInit {
 
-	messages: any[];
+	public selectedServerId: any;
 
-	constructor(private chatService: ChatService) {
-		this.messages = this.chatService.messageList;
+	constructor(private chatService: ChatService, private route: ActivatedRoute) {
+		this.selectedServerId = 1;
+
+		/*this.router.events.subscribe(
+			(event) => {
+				if(event instanceof NavigationEnd){
+					console.log(event.id);
+				}
+				this.route.params.subscribe(
+					params => this.user$ = params.id
+				)
+			}
+		);*/
 	}
 
 	ngOnInit() {
 		this.chatService.onMessage$.subscribe(
 			// Called whenever there is a message from the chat service.
 			(msg) => {
+				console.log("chat-window received", msg);
 				//this.addMessage(msg);
 			},
 			// Called if at any point WebSocket API signals some kind of error.
@@ -33,11 +46,8 @@ export class ChatWindowComponent implements OnInit {
 		);
 	}
 
-	public sendMessage(msg) {
-		console.log('yay', msg);
-		//console.log("new message from client to websocket: ", this.message);
-		//this.chatService.messages.next(this.message);
-		//this.message.message = "";
+	public get messages(): any {
+		return this.chatService.messageList[this.selectedServerId];
 	}
 
 }

@@ -1,5 +1,25 @@
 <nav>
 	<ul>
+		<li *ngFor="let server of serverList">
+			<a routerLink="/chat/{{ server.id }}">
+				{{server.name}}
+			</a>
+
+			<!--
+			<a routerLink="server" [class.activated]="currentUrl == '/chat'" style="padding: 0;">
+				<div class="d-flex align-items-center bg-secondary rounded-circle mx-auto" style="width: 60px; height: 60px;">
+					<h4 class="font-weight-bold mx-auto my-0">MG</h4>
+				</div>
+			</a>
+			<a routerLink="">
+				<div>
+					<i class="material-icons">chat</i>
+					<h5 class="font-weight-bold mx-auto my-0">{{server}}</h5>
+				</div>
+			</a>
+			-->
+		</li>
+		<!--
 		<li>
 			<a routerLink="" [class.activated]="currentUrl == '/'">
 				<div>
@@ -12,23 +32,27 @@
 				<i class="material-icons">assignment</i>
 			</a>
 		</li>
+		-->
 		<li>
 			<a routerLink="users" [class.activated]="currentUrl == '/users'">
 				<i class="material-icons">people</i>
 			</a>
 		</li>
-		<!--
-		<li>
-			<a routerLink="chat" [class.activated]="currentUrl == '/chat'" style="padding: 0;">
-				<div class="d-flex align-items-center bg-secondary rounded-circle mx-auto" style="width: 60px; height: 60px;">
-					<h4 class="font-weight-bold mx-auto my-0">MG</h4>
-				</div>
-			</a>
-		</li>
-		-->
 		<li>
 			<a (click)="openCreateRoomModal()">
 				<i class="material-icons">add_box</i>
+			</a>
+		</li>
+
+		<hr style="border-top: 1px solid gray;">
+		<li>
+			<a (click)="openLoginModal()">
+				<i class="material-icons">vpn_key</i>
+			</a>
+		</li>
+		<li>
+			<a (click)="openSignupModal()">
+				<i class="material-icons">assignment_ind</i>
 			</a>
 		</li>
 	</ul>

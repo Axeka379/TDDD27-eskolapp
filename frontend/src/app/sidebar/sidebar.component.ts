@@ -3,6 +3,8 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateRoomFormComponent } from '../create-room-form/create-room-form.component';
+import { LoginComponent } from '../authentication/login/login.component';
+import { SignupComponent } from '../authentication/signup/signup.component';
 import { ChatService } from "../chat.service";
 
 @Component({
@@ -29,6 +31,18 @@ export class SidebarComponent implements OnInit {
 
 	openCreateRoomModal() {
 		this.modalService.open(CreateRoomFormComponent);
+	}
+
+	openLoginModal() {
+		this.modalService.open(LoginComponent);
+	}
+
+	openSignupModal() {
+		this.modalService.open(SignupComponent);
+	}
+
+	private get serverList(): any {
+		return this.chatService.serverList;
 	}
 
 }
