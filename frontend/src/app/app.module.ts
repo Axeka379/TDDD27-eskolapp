@@ -16,13 +16,10 @@ import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
 import { CreateRoomFormComponent } from './create-room-form/create-room-form.component';
 
-import { ChatService } from "./chat.service";
-import { WebsocketService } from "./websocket.service";
+import { ChatService } from './chat.service';
+import { WebsocketService } from './websocket.service';
+import { AuthenticationModule } from './authentication/authentication.module';
 
-
-//BrowserAnimationsModule,
-//SharedModule,
-//ChatModule
 
 @NgModule({
 	declarations: [
@@ -41,7 +38,8 @@ import { WebsocketService } from "./websocket.service";
 		HttpClientModule,
 		BrowserAnimationsModule,
 		FormsModule,
-		NgbModule
+		NgbModule,
+		AuthenticationModule
 	],
 	providers: [
 		{
@@ -52,6 +50,8 @@ import { WebsocketService } from "./websocket.service";
 		ChatService
 	],
 	bootstrap: [AppComponent],
-	entryComponents: [CreateRoomFormComponent]
+	entryComponents: [
+		CreateRoomFormComponent,
+	]
 })
 export class AppModule { }
