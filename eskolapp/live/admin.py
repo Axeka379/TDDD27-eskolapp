@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Server, User
+from .models import Server, ServerAdmin, User, UserAdmin, Membership
 
-admin.site.register(Server)
-admin.site.register(User)
-# Register your models here.
+admin.site.register(Server, ServerAdmin)
+admin.site.register(User, UserAdmin)
+admin.site.register(Membership)

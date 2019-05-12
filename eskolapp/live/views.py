@@ -34,12 +34,18 @@ def getUser(request):
     return JsonResponse({"user": users})
 
 def fetch_user_servers(request):
-    pass
+    servers = Server.objects.filter(users=request.user)
+    return JsonResponse({"servers":[server.name for server in servers]})
 
-"""
-    server = Server.objects.create(name="testing")
-    server.users.set("yo")
-    #    return render(request, 'live/chat_home.html')
+def fetch_server_users(request):
+    if request.method == 'POST':
+        server_id = request.POST.get("server_id", -1)
+        users = User.objects.filter(server__id=server_id)
+        return JsonResponse({"users": [user.name for user in users]})
+    return JsonResponse({})
 
-    return render(request, 'live/chat_home.html')
-"""
+def fetch_server_messages(request):
+    if request.method == 'POST':
+        server_id = request.POST.get("server_id", -1)
+        messages = Message.objects.filter(server__id=server_id)
+        return JsonResponse({"users": [user.name for user in users]})

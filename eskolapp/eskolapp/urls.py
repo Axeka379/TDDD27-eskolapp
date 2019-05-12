@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-from django.contrib.auth import views as auth_views
+#from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 from accounts.views import (
@@ -61,37 +61,43 @@ urlpatterns = [
     url(r'^chat/$', live_views.chat_home, name='chat_home'),
     url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
 
-    url(r'^live/new_server/$', live_views.new_server, name='new_server'),
-    url(r'^live/users/$', live_views.getUser, name='fetch_server_users'),
+    url(r'^fetch_user_servers$', live_views.fetch_user_servers, name='fetch_user_servers'),
+    url(r'^fetch_server_users$', live_views.fetch_server_users, name='fetch_server_users'),
+    url(r'^fetch_server_messages$', live_views.fetch_server_messages, name='fetch_server_messages'),
 
-    path('admin/', admin.site.urls),
-    url('^reset/$',
-        auth_views.PasswordResetView.as_view(
-            template_name='password_reset.html',
-            email_template_name='password_reset_email.html',
-            subject_template_name='password_reset_subject.txt'
-        ),
-        name='password_reset'),
-    url(r'^reset/done/$',
-        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
-        name='password_reset_done'),
-    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
-        name='password_reset_confirm'),
-    url(r'^reset/complete/$',
-        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
-        name='password_reset_complete'),
-    url(r'^settings/password/$',
-        auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
-        name='password_change'),
-    url(r'^settings/password/done/$',
-        auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
-        name='password_change_done'),
-    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.topic_posts,
-        name='topic_posts'),
-    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic,
-        name='reply_topic'),
-    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
-        views.PostUpdateView.as_view(),
-        name='edit_post'),
+
+
+#    url(r'^live/new_server/$', live_views.new_server, name='new_server'),
+#    url(r'^live/users/$', live_views.getUser, name='fetch_server_users'),
+#
+#    path('admin/', admin.site.urls),
+#    url('^reset/$',
+#        auth_views.PasswordResetView.as_view(
+#            template_name='password_reset.html',
+#            email_template_name='password_reset_email.html',
+#            subject_template_name='password_reset_subject.txt'
+#        ),
+#        name='password_reset'),
+#    url(r'^reset/done/$',
+#        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
+##    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+#        auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
+#        name='password_reset_confirm'),
+#    url(r'^reset/complete/$',
+##        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
+#        name='password_reset_complete'),
+    #url(r'^settings/password/$',
+#        auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
+#        name='password_change'),
+#    url(r'^settings/password/done/$',
+#        auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
+#        name='password_change_done'),
+#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.topic_posts,
+#        name='topic_posts'),
+#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic,
+#        name='reply_topic'),
+#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
+#        views.PostUpdateView.as_view(),
+#        name='edit_post'),
+
 ]
