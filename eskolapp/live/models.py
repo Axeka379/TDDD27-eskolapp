@@ -3,16 +3,20 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib.auth import get_user_model
 
-##Reminder (mostly for Axel): Settings.AUTH_USER_MODEL is used to reference djangos user since User is overwritten.
 
 # Create your models here.
 
 class Server(models.Model):
-    name = models.TextField()
-    users = models.ManyToManyField('User', blank=True)
+    name = models.CharField(max_length=30)
+    owner = models.ForeignKey('User', related_name='servers', on_delete=models.CASCADE)
+    users = models.ManyToManyField('User', default=[])
 
+    def get_users(self):
+        return User.objects.username
+        
 class User(AbstractUser):
-    servers = models.ManyToManyField(Server, blank=True)
+    pass
+    #servers = models.ManyToManyField('Server', blank=True, null=True, default=[])
 
 class Message(models.Model):
     server = models.ForeignKey(Server, related_name='messages', on_delete=models.CASCADE)
