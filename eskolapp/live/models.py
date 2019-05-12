@@ -11,9 +11,10 @@ class Server(models.Model):
     owner = models.ForeignKey('User', related_name='servers', on_delete=models.CASCADE)
     users = models.ManyToManyField('User', default=[])
 
-    def get_users(self):
-        return User.objects.username
-        
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     pass
     #servers = models.ManyToManyField('Server', blank=True, null=True, default=[])

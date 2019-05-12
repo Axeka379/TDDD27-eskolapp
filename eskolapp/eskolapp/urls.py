@@ -34,8 +34,10 @@ urlpatterns = [
     url(r'^boards/(?P<pk>\d+)/new/$', board_views.new_topic, name='new_topic'),
 
     url(r'^chat/$', live_views.chat_home, name='chat_home'),
-    url(r'^chat/new_server/$', live_views.new_server, name='new_server'),
     url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
+
+    url(r'^live/new_server/$', live_views.new_server, name='new_server'),
+    url(r'^live/users/$', live_views.getUser, name='fetch_server_users'),
 
     path('admin/', admin.site.urls),
     url('^reset/$',

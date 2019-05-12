@@ -5,7 +5,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 
-from .models import Message, Server
+from .models import Message, Server, User
 import json
 
 
@@ -20,14 +20,17 @@ def chat_room(request, room_name):
 
 def new_server(request):
     #user = get_object_or_404(request.user)
-    print(request.user.id)
+    print("New server: ")
+    servername = get_object_or_404(Server)
+    print(servername)
     #server.users.add(user.username)
-    return JsonResponse({"C":123})
+    return JsonResponse({"hej":123})
 
 def getUser(request):
-    print("check")
-    users = get_object_or_404(self.Server.get_users(),)
-    print(users)
+    serverusers = Server.objects.all()
+    print(serverusers)
+    users = get_object_or_404()
+
     return JsonResponse({"user": users})
 
 def fetch_user_servers(request):
