@@ -19,4 +19,8 @@ export class DataService {
 	getPosts() {
 		return this.http.get('https://jsonplaceholder.typicode.com/posts')
 	}
+
+	createServer() {
+		return this.http.get('http://localhost:8000/chat')
+	}
 }

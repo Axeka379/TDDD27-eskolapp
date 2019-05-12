@@ -9,31 +9,35 @@ export interface Message {
 
 @Injectable()
 export class ChatService {
-	public serverList: string[] = [];
-	public selectedServer: string;
+	public serverList: any[] = [];
 
-	public messageList: any[] = []; // <Message>
+	public messageList: any; // <Message>
 	private messageSubject: Subject<any>;
 
 
 	constructor(private wsService: WebsocketService) {
-		this.serverList.push("Server 1");
-		this.serverList.push("My Thing");
-		//wsService.connect(CHAT_URL);
-		/*
-		wsService.onMessage$.subscribe(
-			data => {
-				console.log(data);
-			}
-		);*/
+		this.messageList = {};
+
+		this.serverList.push({
+			id: 1,
+			name: 'first server'
+		});
+		this.messageList[1] = [];
+		this.serverList.push({
+			id: 2,
+			name: 'my new server'
+		});
+		this.messageList[2] = [];
+
 
 		this.messageSubject = new Subject<any>();
-		//this.messageSubject.next("hello");
 
 		wsService.subject.subscribe(
 			// Called whenever there is a message from the server.
 			(msg) => {
+				console.log("chat.service received", msg);
 				this.onData(msg);
+				//this.messageSubject.next("hello");
 			},
 			// Called if at any point WebSocket API signals some kind of error.
 			(err: Event) => {
@@ -56,6 +60,10 @@ export class ChatService {
 			}
 		);*/
 	}
+
+	//public get messages(): any {
+	//	return this.messageList[this.selectedServerId];
+	//}
 
 	public get onMessage$(): Observable<MessageEvent> {
 		return this.messageSubject.asObservable();
@@ -105,9 +113,8 @@ export class ChatService {
 
 		let image = this.getUserImage(message.user_id);
 
-		this.messageList.push({
+		this.messageList[server_id].push({
 			type,
-			server_id,
 			author,
 			msg_id,
 			image,
@@ -123,9 +130,8 @@ export class ChatService {
 		let msg_id = message.msg_id;
 		let timestamp = message.timestamp;
 
-		this.messageList.push({
+		this.messageList[server_id].push({
 			type,
-			server_id,
 			author,
 			msg_id,
 			timestamp,
@@ -139,9 +145,8 @@ export class ChatService {
 		let msg_id = message.msg_id;
 		let timestamp = message.timestamp;
 
-		this.messageList.push({
+		this.messageList[server_id].push({
 			type,
-			server_id,
 			author,
 			msg_id,
 			timestamp,
