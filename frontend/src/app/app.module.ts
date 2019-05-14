@@ -6,6 +6,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -19,6 +20,7 @@ import { CreateRoomFormComponent } from './create-room-form/create-room-form.com
 import { ChatService } from './chat.service';
 import { WebsocketService } from './websocket.service';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { TokenInterceptor } from './authentication/token.interceptor';
 
 
 @NgModule({
@@ -45,6 +47,11 @@ import { AuthenticationModule } from './authentication/authentication.module';
 		{
 			provide: LocationStrategy,
 			useClass: HashLocationStrategy
+		},
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true
 		},
 		WebsocketService,
 		ChatService

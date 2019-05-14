@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ChatService } from "../chat.service";
 import { WebsocketService } from "../websocket.service";
 
@@ -10,21 +9,7 @@ import { WebsocketService } from "../websocket.service";
 })
 export class ChatWindowComponent implements OnInit {
 
-	public selectedServerId: any;
-
-	constructor(private chatService: ChatService, private route: ActivatedRoute) {
-		this.selectedServerId = 1;
-
-		/*this.router.events.subscribe(
-			(event) => {
-				if(event instanceof NavigationEnd){
-					console.log(event.id);
-				}
-				this.route.params.subscribe(
-					params => this.user$ = params.id
-				)
-			}
-		);*/
+	constructor(private chatService: ChatService) {
 	}
 
 	ngOnInit() {
@@ -47,7 +32,7 @@ export class ChatWindowComponent implements OnInit {
 	}
 
 	public get messages(): any {
-		return this.chatService.messageList[this.selectedServerId];
+		return this.chatService.messages;
 	}
 
 }

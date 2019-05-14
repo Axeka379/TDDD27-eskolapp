@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 
+import { UserService } from './user.service';
+
 
 @NgModule({
 	declarations: [LoginComponent, SignupComponent],
@@ -19,6 +21,9 @@ import { SignupComponent } from './signup/signup.component';
 	entryComponents: [
 		LoginComponent,
 		SignupComponent
+	],
+	providers: [
+		UserService
 	]
 })
 export class AuthenticationModule { }

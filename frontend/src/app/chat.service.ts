@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs/Rx";
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { WebsocketService } from "./websocket.service";
 
 export interface Message {
@@ -9,13 +11,20 @@ export interface Message {
 
 @Injectable()
 export class ChatService {
+	public rootUrl: string = "http://localhost:8000";
+
 	public serverList: any[] = [];
+	public selectedServerId: any;
 
 	public messageList: any; // <Message>
 	private messageSubject: Subject<any>;
 
 
-	constructor(private wsService: WebsocketService) {
+	constructor(
+		private wsService: WebsocketService,
+		private route: ActivatedRoute,
+		private http: HttpClient
+	) {
 		this.messageList = {};
 
 		this.serverList.push({
@@ -29,6 +38,14 @@ export class ChatService {
 		});
 		this.messageList[2] = [];
 
+		this.selectedServerId = 1;
+
+		this.route.params.subscribe(
+			(params) => {
+				this.selectedServerId = params.server_id;
+			}
+		);
+
 
 		this.messageSubject = new Subject<any>();
 
@@ -41,12 +58,12 @@ export class ChatService {
 			},
 			// Called if at any point WebSocket API signals some kind of error.
 			(err: Event) => {
-				console.log('socket error:', err);
+				console.warn('socket error:', err);
 				// reconnect
 			},
 			// Called when connection is closed (for whatever reason).
 			() => {
-				console.log('connection closed');
+				console.warn('connection closed');
 			}
 		);
 
@@ -61,9 +78,67 @@ export class ChatService {
 		);*/
 	}
 
-	//public get messages(): any {
-	//	return this.messageList[this.selectedServerId];
-	//}
+	public postTest() {
+		//this.http.defaults.xsrfCookieName = 'csrftoken';
+		//this.http.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+		let token = localStorage.getItem('token');
+
+		let data = {
+			server_id: 1,
+			test: "yes",
+			token: token,
+			csrfmiddlewaretoken: token
+		};
+
+		var headers_object = new HttpHeaders();
+		headers_object.append('Content-Type', 'application/json');
+		headers_object.append("Authorization", "Token " + token);
+		headers_object.append("Authorization", "Bearer " + token);
+
+		const httpOptions = {
+			headers: headers_object
+		};
+
+		this.http.get(this.rootUrl + '/user/')
+		.subscribe(
+			result => {
+				console.log('yay', result)
+			}
+		);
+
+		/*
+		this.http.post(
+			this.rootUrl + '/fetch_server_users/',
+			JSON.stringify(data)
+		)
+		.subscribe(
+			result => {
+				console.log('fetch_server_users', result)
+			},
+			error => {
+				console.warn('fetch_server_users', error);
+			}
+		);
+		*/
+
+		/*
+		var res = this.http.post(
+			this.rootUrl + '/fetch_server_users/',
+			data,
+			httpOptions)
+		.subscribe(
+			res => {
+				console.log("Success!", res)
+				return res;
+			},
+			error => {console.warn(error);}
+		)*/
+	}
+
+	public get messages(): any {
+		return this.messageList[this.selectedServerId];
+	}
 
 	public get onMessage$(): Observable<MessageEvent> {
 		return this.messageSubject.asObservable();
@@ -73,6 +148,7 @@ export class ChatService {
 		this.wsService.send(
 			{
 				"type": "message",
+				"server_id": this.selectedServerId,
 				"content": message
 			}
 		);
