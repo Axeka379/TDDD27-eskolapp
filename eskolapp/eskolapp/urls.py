@@ -50,9 +50,11 @@ urlpatterns = [
     url(r'^user/$', UserDetailsView.as_view(), name='user_details'),
     url(r'^password/change/$', PasswordChangeView.as_view(), name='password_change'),
 
+    #Django rest-api token
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^api-token-verify/', verify_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
+
 
     #url(r'^chat/$', live_views.chat_home, name='chat_home'),
     #url(r'^chat/new_server/$', live_views.new_server, name='new_server'),
@@ -70,9 +72,9 @@ urlpatterns = [
 
     url(r'^create_new_server$', live_views.create_new_server, name='create_new_server'),
 
-    url(r'^fetch_user_servers$', live_views.fetch_user_servers, name='fetch_user_servers'),
-    url(r'^fetch_server_users$', live_views.fetch_server_users, name='fetch_server_users'),
-    url(r'^fetch_server_messages$', live_views.fetch_server_messages, name='fetch_server_messages'),
+    url(r'^fetch_user_servers/$', live_views.fetch_user_servers, name='fetch_user_servers'),
+    url(r'^fetch_server_users/$', live_views.fetch_server_users, name='fetch_server_users'),
+    url(r'^fetch_server_messages/$', live_views.fetch_server_messages, name='fetch_server_messages'),
 
 
 

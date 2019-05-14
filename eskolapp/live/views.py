@@ -5,6 +5,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 
+
 from .models import Message, Server, User
 import json
 
@@ -28,7 +29,9 @@ def fetch_user_servers(request):
     servers = Server.objects.filter(users=request.user)
     return JsonResponse({"servers":[server.name for server in servers]})
 
+
 def fetch_server_users(request):
+    print("Hello world", request.POST)
     if request.method == 'POST':
         server_id = request.POST.get("server_id", -1)
         users = User.objects.filter(server__id=server_id)

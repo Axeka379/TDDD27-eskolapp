@@ -93,19 +93,37 @@ export class ChatService {
 
 		var headers_object = new HttpHeaders();
 		headers_object.append('Content-Type', 'application/json');
-		headers_object.append("Authorization", "Token " + token);
-		headers_object.append("Authorization", "Bearer " + token);
+		//headers_object.append("Authorization", "Token " + token);
+		//headers_object.append("Authorization", "Bearer " + token);
 
 		const httpOptions = {
 			headers: headers_object
 		};
 
-		this.http.get(this.rootUrl + '/user/')
+		this.http.post(this.rootUrl + '/api-token-auth/',
+			{username:"Bob", password:"bobbytables"},
+			headers_object
+			)
 		.subscribe(
 			result => {
 				console.log('yay', result)
+				localStorage.setItem("token", result.token)
 			}
+
+
 		);
+
+		this.http.post(this.rootUrl + '/api-token-refresh/',
+			{token:localStorage.getItem("token"), },
+			headers_object
+			)
+		.subscribe(
+			result => {
+				console.log('yay', result)
+				localStorage.setItem("token", result.token)
+
+			}
+		)
 
 		/*
 		this.http.post(
@@ -122,7 +140,7 @@ export class ChatService {
 		);
 		*/
 
-		/*
+
 		var res = this.http.post(
 			this.rootUrl + '/fetch_server_users/',
 			data,
@@ -133,7 +151,7 @@ export class ChatService {
 				return res;
 			},
 			error => {console.warn(error);}
-		)*/
+		)
 	}
 
 	public get messages(): any {
