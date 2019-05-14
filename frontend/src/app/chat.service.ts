@@ -100,10 +100,10 @@ export class ChatService {
 			headers: headers_object
 		};
 
-		this.http.post(this.rootUrl + '/api-token-auth/',
-			{username:"Bob", password:"bobbytables"},
-			headers_object
-			)
+		this.http.post<{token:string}>(
+			this.rootUrl + '/api-token-auth/',
+			{ username: "Golen", password: "1234" },
+			httpOptions)
 		.subscribe(
 			result => {
 				console.log('yay', result)
@@ -113,10 +113,10 @@ export class ChatService {
 
 		);
 
-		this.http.post(this.rootUrl + '/api-token-refresh/',
-			{token:localStorage.getItem("token"), },
-			headers_object
-			)
+		this.http.post<{token:string}>(
+			this.rootUrl + '/api-token-refresh/',
+			{ token: localStorage.getItem("token") },
+			httpOptions)
 		.subscribe(
 			result => {
 				console.log('yay', result)
@@ -124,22 +124,6 @@ export class ChatService {
 
 			}
 		)
-
-		/*
-		this.http.post(
-			this.rootUrl + '/fetch_server_users/',
-			JSON.stringify(data)
-		)
-		.subscribe(
-			result => {
-				console.log('fetch_server_users', result)
-			},
-			error => {
-				console.warn('fetch_server_users', error);
-			}
-		);
-		*/
-
 
 		var res = this.http.post(
 			this.rootUrl + '/fetch_server_users/',

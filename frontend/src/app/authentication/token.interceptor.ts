@@ -15,7 +15,6 @@ export class TokenInterceptor implements HttpInterceptor {
 				Authorization: `JWT ${this.user.getToken()}`
 			}
 		});
-		console.log("Token inserted", `JWT ${this.user.getToken()}`);
 
 		return next.handle(request).do((event: HttpEvent<any>) => {
 			if (event instanceof HttpResponse) {
