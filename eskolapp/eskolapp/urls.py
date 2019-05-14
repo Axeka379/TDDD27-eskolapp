@@ -18,6 +18,9 @@ from django.urls import path
 from django.conf.urls import url
 #from django.contrib.auth import views as auth_views
 from django.urls import include, path
+from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import verify_jwt_token
+
 
 from accounts.views import (
     LoginView, LogoutView, UserDetailsView, PasswordChangeView,
@@ -28,6 +31,7 @@ from accounts.views import (
 from chat import views as board_views
 from chat import views
 from live import views as live_views
+from rest_framework_jwt.views import refresh_jwt_token
 
 
 urlpatterns = [
@@ -46,6 +50,9 @@ urlpatterns = [
     url(r'^user/$', UserDetailsView.as_view(), name='user_details'),
     url(r'^password/change/$', PasswordChangeView.as_view(), name='password_change'),
 
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
 
     #url(r'^chat/$', live_views.chat_home, name='chat_home'),
     #url(r'^chat/new_server/$', live_views.new_server, name='new_server'),
@@ -60,6 +67,8 @@ urlpatterns = [
 
     url(r'^chat/$', live_views.chat_home, name='chat_home'),
     url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
+
+    url(r'^create_new_server$', live_views.create_new_server, name='create_new_server'),
 
     url(r'^fetch_user_servers$', live_views.fetch_user_servers, name='fetch_user_servers'),
     url(r'^fetch_server_users$', live_views.fetch_server_users, name='fetch_server_users'),
