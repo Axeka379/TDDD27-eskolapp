@@ -79,9 +79,6 @@ export class ChatService {
 	}
 
 	public postTest() {
-		//this.http.defaults.xsrfCookieName = 'csrftoken';
-		//this.http.defaults.xsrfHeaderName = 'X-CSRFToken';
-
 		let token = localStorage.getItem('token');
 
 		let data = {
@@ -91,13 +88,10 @@ export class ChatService {
 			csrfmiddlewaretoken: token
 		};
 
-		var headers_object = new HttpHeaders();
-		headers_object.append('Content-Type', 'application/json');
-		//headers_object.append("Authorization", "Token " + token);
-		//headers_object.append("Authorization", "Bearer " + token);
-
-		const httpOptions = {
-			headers: headers_object
+		let httpOptions = {
+			headers: new HttpHeaders({
+				'Content-Type': 'application/json',
+			})
 		};
 
 		this.http.post<{token:string}>(
@@ -106,36 +100,39 @@ export class ChatService {
 			httpOptions)
 		.subscribe(
 			result => {
-				console.log('yay', result)
-				localStorage.setItem("token", result.token)
+				console.log('/api-token-auth/ success:', result);
+				localStorage.setItem("token", result.token);
+				// (1) --------
+
+				this.http.post<{token:string}>(
+					this.rootUrl + '/api-token-refresh/',
+					{ token: localStorage.getItem("token") },
+					httpOptions)
+				.subscribe(
+					result => {
+						console.log('/api-token-refresh/ success:', result);
+						localStorage.setItem("token", result.token);
+						// (2) --------
+
+						var res = this.http.post(
+							this.rootUrl + '/user/',
+							JSON.stringify({body:"test test"}),
+							httpOptions)
+						.subscribe(
+							res => {
+								console.log("Success!", res)
+								return res;
+							},
+							//error => {console.warn(error);}
+						);
+
+						// (2) --------
+					}
+				);
+
+				// (1) --------
 			}
-
-
 		);
-
-		this.http.post<{token:string}>(
-			this.rootUrl + '/api-token-refresh/',
-			{ token: localStorage.getItem("token") },
-			httpOptions)
-		.subscribe(
-			result => {
-				console.log('yay', result)
-				localStorage.setItem("token", result.token)
-
-			}
-		)
-
-		var res = this.http.post(
-			this.rootUrl + '/fetch_server_users/',
-			data,
-			httpOptions)
-		.subscribe(
-			res => {
-				console.log("Success!", res)
-				return res;
-			},
-			error => {console.warn(error);}
-		)
 	}
 
 	public get messages(): any {

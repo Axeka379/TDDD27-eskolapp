@@ -12,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
 		request = request.clone({
 			setHeaders: {
-				Authorization: `JWT ${this.user.getToken()}`
+				Authorization: `JWT ${this.user.token}`
 			}
 		});
 
