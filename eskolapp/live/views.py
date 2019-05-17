@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
-#from rest_framework import viewsets, permissions
-#from rest_framework import serializers
+from rest_framework import viewsets, permissions
+from rest_framework import serializers
 
 from .models import Message, Server, User
 import json
@@ -17,6 +17,10 @@ def chat_room(request, room_name):
     return render(request, 'live/chat_room.html', {
         'room_name_json': mark_safe(json.dumps(room_name))
     })
+
+#class ServerViewSet:
+#    server = Server.
+
 
 def create_new_server(request):
     if request.method == 'POST':

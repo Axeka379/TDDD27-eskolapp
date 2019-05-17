@@ -35,7 +35,6 @@ from live import views as live_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'', include('frontend.urls')),
-
     #url(r'^$', frontend_views.index, name='home'),
 
     #Django rest-api token
