@@ -16,10 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
-#from django.contrib.auth import views as auth_views
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
-from rest_framework_jwt.views import obtain_jwt_token
-from rest_framework_jwt.views import verify_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
 
 from accounts.views import (
@@ -31,29 +30,30 @@ from accounts.views import (
 from chat import views as board_views
 from chat import views
 from live import views as live_views
-from rest_framework_jwt.views import refresh_jwt_token
 
 
 urlpatterns = [
-    #url(r'^$', views.BoardListView.as_view(), name='home'),
-    url(r'^$', live_views.chat_home, name='home'),
     path('admin/', admin.site.urls),
+    path(r'', include('frontend.urls')),
 
-
-    # URLs that do not require a session or valid token
-    url(r'^password/reset/$', PasswordResetView.as_view(), name='password_reset'),
-    url(r'^password/reset/confirm/$', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^register/', include('rest_auth.registration.urls')),
-    # URLs that require a user to be logged in with a valid session / token.
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^user/$', UserDetailsView.as_view(), name='user_details'),
-    url(r'^password/change/$', PasswordChangeView.as_view(), name='password_change'),
+    #url(r'^$', frontend_views.index, name='home'),
 
     #Django rest-api token
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^api-token-verify/', verify_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
+
+
+    # URLs that do not require a session or valid token
+    #url(r'^password/reset/$', PasswordResetView.as_view(), name='password_reset'),
+    #url(r'^password/reset/confirm/$', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    #url(r'^login/$', LoginView.as_view(), name='login'),
+    #url(r'^register/', include('rest_auth.registration.urls')),
+    # URLs that require a user to be logged in with a valid session / token.
+    #url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    #url(r'^user/$', UserDetailsView.as_view(), name='user_details'),
+    #url(r'^password/change/$', PasswordChangeView.as_view(), name='password_change'),
+
 
 
     #url(r'^chat/$', live_views.chat_home, name='chat_home'),
@@ -62,7 +62,7 @@ urlpatterns = [
 
     #url(r'^signup/$', accounts_views.signup, name='signup'),
     #url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
-    #url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 
     #url(r'^boards/(?P<pk>\d+)/$', board_views.board_topics, name='board_topics'),
     #url(r'^boards/(?P<pk>\d+)/new/$', board_views.new_topic, name='new_topic'),
@@ -75,7 +75,6 @@ urlpatterns = [
     url(r'^fetch_user_servers/$', live_views.fetch_user_servers, name='fetch_user_servers'),
     url(r'^fetch_server_users/$', live_views.fetch_server_users, name='fetch_server_users'),
     url(r'^fetch_server_messages/$', live_views.fetch_server_messages, name='fetch_server_messages'),
-
 
 
 #    url(r'^live/new_server/$', live_views.new_server, name='new_server'),

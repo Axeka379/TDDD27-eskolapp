@@ -1,10 +1,11 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth import get_user_model
-
+#from rest_framework import viewsets, permissions
+#from rest_framework import serializers
 
 from .models import Message, Server, User
 import json

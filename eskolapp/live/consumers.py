@@ -25,7 +25,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             print('\033[0m')
 
         await self.accept()
-        await self.on_join()
+        await self.on_join(1) # server_id
+        await self.on_join(2)
 
     # On connection closing
     async def disconnect(self, close_code):
@@ -35,7 +36,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        await self.on_leave()
+        await self.on_leave(1) # server_id
+        await self.on_leave(2)
 
     # Receive message from WebSocket: {type: string, ...}
     async def receive_json(self, json_data):
@@ -49,9 +51,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             print("Error in receive_json:", json_data)
 
 
-    async def on_join(self):
+    async def on_join(self, server_id):
         # TODO: Add message to database and use values below
-        server_id = 1
         msg_id = 1
         time_now = time.time() * 1000
 
@@ -78,9 +79,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
 
 
     #
-    async def on_leave(self):
+    async def on_leave(self, server_id):
         # TODO: Add message to database and use values below
-        server_id = 1
         msg_id = 1
         time_now = time.time() * 1000
 
@@ -109,8 +109,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
     # Receive message from room group
     async def on_send_message(self, json_data):
         # TODO: Add message to database and use values below
-        content = json_data['content']
-        server_id = 1
+        content = json_data.get('content', '<missing content>')
+        server_id = json_data.get('server_id', -1)
         msg_id = 1
         time_now = time.time() * 1000
 

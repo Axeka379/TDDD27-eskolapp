@@ -1,0 +1,35 @@
+<div class="chatWrapper flex-grow-1">
+	<div class="my-3 p-3 bg-white rounded shadow-sm">
+
+		<div *ngFor="let msg of messages" [ngSwitch]="msg.type">
+
+			<div class="msgBox" *ngSwitchCase="'message'">
+				<img src="{{ msg.image }}" width="44" height="44" />
+				<div class="msgContent">
+					<div class="msgHeader">
+						<span class="text-muted mr-1"><small>{{ msg.timestamp | date: "shortTime" }}</small></span>
+						<span class="font-weight-bold">{{ msg.author }}</span>
+					</div>
+					<span class="msgText">{{ msg.content }}</span>
+				</div>
+			</div>
+
+			<div class="msgBox" *ngSwitchCase="'join'">
+				<div class="msgContent">
+					<div class="msgHeader"></div>
+					<span class="msgText">{{ msg.author }} join the room</span>
+				</div>
+			</div>
+
+			<div class="msgBox" *ngSwitchCase="'leave'">
+				<div class="msgContent">
+					<div class="msgHeader"></div>
+					<span class="msgText">{{ msg.author }} left the room</span>
+				</div>
+			</div>
+
+		</div>
+
+		<app-chat-form></app-chat-form>
+	</div>
+</div>

@@ -1,0 +1,44 @@
+<div>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Create Your Server</h4>
+		<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<form
+		ngNativeValidate
+		#createServerForm="ngForm"
+		(ngSubmit)="onSubmit(createServerForm)">
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="serverName">Server name</label>
+				<input
+					ngModel
+					type="text"
+					#serverName
+					class="form-control"
+					id="serverName"
+					name="serverName"
+					autocomplete="off"
+					placeholder="Server name"
+					ngbAutofocus
+					required>
+			</div>
+
+			<div class="form-group">
+				<label for="serverType">Server type</label>
+				<select class="form-control" id="serverType" required>
+					<option *ngFor="let type of serverTypes" [value]="type">{{type}}</option>
+				</select>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button
+				type="submit"
+				class="btn btn-outline-dark">Create</button>
+		</div>
+	</form>
+
+</div>
