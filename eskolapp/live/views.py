@@ -3,7 +3,10 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.http import JsonResponse
+from rest_framework.response import Response
+
 from django.contrib.auth import get_user_model
+from .serializers import ServerSerializer
 #from rest_framework import viewsets, permissions
 #from rest_framework import serializers
 
@@ -31,13 +34,22 @@ def create_new_server(request):
 @api_view(['POST'])
 def fetch_user_servers(request):
     servers = Server.objects.filter(users=request.user)
-    return JsonResponse({"servers":[server.name for server in servers]})
+    return JsonResponse({
+        "servers": [{
+            "name": server.name,
+            "id": server.id
+        } for server in servers]
+    })
 
 @api_view(['POST'])
 def fetch_server_users(request, format=None):
     if request.method == 'POST':
         server_id = request.data.get("server_id", -1)
-        users = User.objects.filter(server__id=server_id)
+        print(server_id)
+        print([server.id for server in Server.objects.all()], "\n")
+        #users = User.objects.filter(server__id=server_id)
+        users = User.objects.all()
+
         return JsonResponse({"users": [user.username for user in users]})
     return JsonResponse({"status":"failed to fetch server users"})
 
