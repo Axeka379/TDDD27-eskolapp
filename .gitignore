@@ -41,4 +41,4 @@ yarn-error.log
 # User specific bazel settings
 .bazelrc.user
 
-frontend/static/frontend
+eskolapp/frontend/static/frontend/
