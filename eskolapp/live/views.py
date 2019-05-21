@@ -46,4 +46,4 @@ def fetch_server_messages(request):
     if request.method == 'POST':
         server_id = request.data.get("server_id", -1)
         messages = Message.objects.filter(server__id=server_id)
-        return JsonResponse({"users": [user.name for user in users]})
+        return JsonResponse({"users": [user.username for user in users]})
