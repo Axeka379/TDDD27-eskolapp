@@ -24,11 +24,11 @@ def chat_room(request, room_name):
 
 @api_view(['POST'])
 def create_new_server(request):
-    if request.method == 'POST':
-        server_name = request.data.get('server_name', None)
-        if server_name:
-            server = Server.objects.create(name=server_name, owner=request.user)
-            return JsonResponse({"status":"created server"})
+    server_name = request.data.get('server_name', None)
+    if server_name:
+        server = Server.objects.create(name=server_name, owner=request.user)
+        server.users.add(request.user)
+        return JsonResponse({"status":"created server"})
     return JsonResponse({"status": "failed to create server"})
 
 @api_view(['POST'])
@@ -45,10 +45,7 @@ def fetch_user_servers(request):
 def fetch_server_users(request, format=None):
     if request.method == 'POST':
         server_id = request.data.get("server_id", -1)
-        print(server_id)
-        print([server.id for server in Server.objects.all()], "\n")
-        #users = User.objects.filter(server__id=server_id)
-        users = User.objects.all()
+        users = User.objects.filter(server__id=server_id)
 
         return JsonResponse({"users": [user.username for user in users]})
     return JsonResponse({"status":"failed to fetch server users"})
@@ -58,4 +55,11 @@ def fetch_server_messages(request):
     if request.method == 'POST':
         server_id = request.data.get("server_id", -1)
         messages = Message.objects.filter(server__id=server_id)
-        return JsonResponse({"users": [user.username for user in users]})
+        print(Server.objects.get(pk=server_id))
+        return JsonResponse({
+            "messages": [{
+                "user": message.user.username,
+                "content": message.content
+            } for message in messages]
+        })
+    return JsonResponse({"status":"failed to fetch messages "})

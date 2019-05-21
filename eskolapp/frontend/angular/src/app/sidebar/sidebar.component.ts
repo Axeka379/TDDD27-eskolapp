@@ -30,6 +30,7 @@ export class SidebarComponent implements OnInit {
 	ngOnInit() {}
 
 	openCreateRoomModal() {
+		console.log("Creating server");
 		this.chatService.postTest();
 		//this.modalService.open(CreateRoomFormComponent);
 	}

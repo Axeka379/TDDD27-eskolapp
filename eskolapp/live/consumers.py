@@ -1,6 +1,7 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from .models import Server, Message
 import json, time
 
 class ChatConsumer(AsyncJsonWebsocketConsumer):
@@ -111,8 +112,16 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         # TODO: Add message to database and use values below
         content = json_data.get('content', '<missing content>')
         server_id = json_data.get('server_id', -1)
+        print(server_id)
+        server_id = 4
+        server = Server.objects.get(pk=server_id)
         msg_id = 1
         time_now = time.time() * 1000
+        message = Message.objects.create(
+            server=server,
+            user=self.user,
+            content=content,
+            content_html=content)
 
         await self.channel_layer.group_send(
             self.room_group_name,

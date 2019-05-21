@@ -85,10 +85,9 @@ export class ChatService {
 				'Content-Type': 'application/json',
 			})
 		};
-
 		this.http.post<{token:string}>(
 			this.rootUrl + '/api-token-auth/',
-			{ username: "Golen", password: "1234" },
+			{ username: "Bob", password: "bobbytables" },
 			httpOptions)
 		.subscribe(
 			result => {
@@ -107,12 +106,12 @@ export class ChatService {
 						// (2) --------
 
 						this.http.post(
-							this.rootUrl + '/fetch_server_users/',
-							{ server_id: this.selectedServerId },
+							this.rootUrl + '/fetch_server_messages/',
+							{server_id: 4},
 							httpOptions)
 						.subscribe(
 							result => {
-								console.log("/fetch_server_users/ success:", result);
+								console.log("/fetch_server_messages/ success:", result);
 							},
 							error => {
 								console.warn(error);

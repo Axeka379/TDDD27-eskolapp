@@ -20,11 +20,7 @@ export class CreateRoomFormComponent implements OnInit {
 	onSubmit(formData): void {
 		let name = formData.form.value.serverName;
 
-		this.data.createServer().subscribe(
-			data => {
-				console.log('Create Server:', data);
-			}
-		);
+		this.data.createServer(name);
 		this.activeModal.close();
 	}
 }
