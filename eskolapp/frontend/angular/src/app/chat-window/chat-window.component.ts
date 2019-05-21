@@ -16,7 +16,9 @@ export class ChatWindowComponent implements OnInit {
 	) {
 		this.route.params.subscribe(
 			(params) => {
-				this.chatService.selectedServerId = params.server_id;
+				if (params.server_id) {
+					this.chatService.selectedServerId = params.server_id;
+				}
 			}
 		);
 	}

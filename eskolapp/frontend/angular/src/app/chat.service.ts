@@ -106,16 +106,17 @@ export class ChatService {
 						localStorage.setItem("token", result.token);
 						// (2) --------
 
-						var res = this.http.post(
+						this.http.post(
 							this.rootUrl + '/fetch_server_users/',
-							JSON.stringify({server_id: this.selectedServerId}),
+							{ server_id: this.selectedServerId },
 							httpOptions)
 						.subscribe(
-							res => {
-								console.log("Success!", res)
-								return res;
+							result => {
+								console.log("/fetch_server_users/ success:", result);
 							},
-							//error => {console.warn(error);}
+							error => {
+								console.warn(error);
+							}
 						);
 
 						// (2) --------
