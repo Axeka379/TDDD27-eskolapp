@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CreateRoomFormComponent } from '../create-room-form/create-room-form.component';
+import { CreateServerFormComponent } from '../create-server-form/create-server-form.component';
+import { JoinServerFormComponent } from '../join-server-form/join-server-form.component';
 import { LoginComponent } from '../auth/login/login.component';
 import { SignupComponent } from '../auth/signup/signup.component';
 import { LogoutComponent } from '../auth/logout/logout.component';
@@ -39,8 +40,12 @@ export class SidebarComponent implements OnInit {
 	}
 
 
-	openCreateRoomModal() {
-		this.modalService.open(CreateRoomFormComponent);
+	openCreateServerModal() {
+		this.modalService.open(CreateServerFormComponent);
+	}
+
+	openJoinServerModal() {
+		this.modalService.open(JoinServerFormComponent);
 	}
 
 	openLoginModal() {

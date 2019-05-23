@@ -10,7 +10,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { CreateRoomFormComponent } from './create-room-form/create-room-form.component';
+import { CreateServerFormComponent } from './create-server-form/create-server-form.component';
+import { JoinServerFormComponent } from './join-server-form/join-server-form.component';
 
 import { WebsocketService } from './websocket.service';
 import { AuthModule } from './auth/auth.module';
@@ -22,7 +23,8 @@ import { TokenInterceptor } from './auth/token.interceptor';
 	declarations: [
 		AppComponent,
 		SidebarComponent,
-		CreateRoomFormComponent
+		CreateServerFormComponent,
+		JoinServerFormComponent
 	],
 	imports: [
 		BrowserModule,
@@ -52,7 +54,8 @@ import { TokenInterceptor } from './auth/token.interceptor';
 	],
 	bootstrap: [AppComponent],
 	entryComponents: [
-		CreateRoomFormComponent,
+		CreateServerFormComponent,
+		JoinServerFormComponent,
 	]
 })
 export class AppModule { }

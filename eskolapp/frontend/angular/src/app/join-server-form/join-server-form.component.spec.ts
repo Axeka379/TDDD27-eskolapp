@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateRoomFormComponent } from './create-room-form.component';
+import { JoinServerFormComponent } from './join-server-form.component';
 
-describe('CreateRoomFormComponent', () => {
-  let component: CreateRoomFormComponent;
-  let fixture: ComponentFixture<CreateRoomFormComponent>;
+describe('JoinServerFormComponent', () => {
+  let component: JoinServerFormComponent;
+  let fixture: ComponentFixture<JoinServerFormComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CreateRoomFormComponent ]
+      declarations: [ JoinServerFormComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CreateRoomFormComponent);
+    fixture = TestBed.createComponent(JoinServerFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

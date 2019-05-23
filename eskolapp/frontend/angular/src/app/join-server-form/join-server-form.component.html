@@ -1,0 +1,37 @@
+<div>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Join a Server</h4>
+		<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<form
+		ngNativeValidate
+		#myForm="ngForm"
+		(ngSubmit)="onSubmit(myForm)">
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="serverKey">Key</label>
+				<input
+					ngModel
+					type="text"
+					#serverKey
+					class="form-control"
+					id="serverKey"
+					name="serverKey"
+					autocomplete="off"
+					placeholder="Key"
+					ngbAutofocus
+					required>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button
+				type="submit"
+				class="btn btn-outline-dark">Join</button>
+		</div>
+	</form>
+
+</div>

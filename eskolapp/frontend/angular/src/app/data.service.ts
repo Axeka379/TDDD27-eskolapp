@@ -116,6 +116,14 @@ export class DataService {
 		);
 	}
 
+	joinServer(key) {
+		return this.http.post(
+			'/join_server/',
+			{ key },
+			this.httpOptions
+		);
+	}
+
 	leaveServer(server_id) {
 		return this.http.post(
 			'/leave_server/',

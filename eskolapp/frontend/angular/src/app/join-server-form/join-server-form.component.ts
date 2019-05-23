@@ -3,11 +3,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../data.service';
 
 @Component({
-	selector: 'app-create-room-form',
-	templateUrl: './create-room-form.component.html',
-	styleUrls: ['./create-room-form.component.scss']
+	selector: 'app-join-server-form',
+	templateUrl: './join-server-form.component.html',
+	styleUrls: ['./join-server-form.component.scss']
 })
-export class CreateRoomFormComponent implements OnInit {
+export class JoinServerFormComponent implements OnInit {
 	serverTypes = ['Private', 'Group'];
 
 	constructor(
@@ -18,11 +18,11 @@ export class CreateRoomFormComponent implements OnInit {
 	ngOnInit() {}
 
 	onSubmit(formData): void {
-		let server_name = formData.form.value.serverName;
+		let key = formData.form.value.serverKey;
 
-		this.data.createServer(server_name).subscribe(
+		this.data.joinServer(key).subscribe(
 			result => {
-				console.log('createServer', result);
+				console.log('joinServer', result);
 				this.activeModal.close();
 			},
 			error => { console.warn(error); }
