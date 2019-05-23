@@ -1,6 +1,6 @@
 <div>
 	<div class="modal-header">
-		<h4 class="modal-title" id="modal-basic-title">Log in</h4>
+		<h4 class="modal-title" id="modal-basic-title">Sign up</h4>
 		<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -44,7 +44,7 @@
 					name="password1"
 					[(ngModel)]="form.password1"
 					placeholder="Password"
-					type="text"
+					type="password"
 					required>
 			</div>
 
@@ -55,7 +55,7 @@
 					name="password2"
 					[(ngModel)]="form.password2"
 					placeholder="Comfirm password"
-					type="text"
+					type="password"
 					required>
 			</div>
 

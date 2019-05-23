@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+import { DataService } from '../../data.service';
 
 @Component({
 	selector: 'app-signup',
@@ -19,21 +20,22 @@ export class SignupComponent implements OnInit {
 
 	constructor(
 		public activeModal: NgbActiveModal,
-		private http: HttpClient
+		private http: HttpClient,
+		private data: DataService
 	) {}
 
 	ngOnInit() {}
 
 	onSubmit() {
-		/*this.data.register(...).subscribe(
+		this.data.register(this.form).subscribe(
 			result => {
-				console.log('Registered!');
-				login!!
+				console.log('Registered!', result);
+				//login!!
 				this.activeModal.close();
 			},
-			error => { console.warn(error); }
-		);*/
-
+			error => { console.warn(error.error); }
+		);
+		/*
 		this.http.post('http://127.0.0.1:8000/register/', this.form)
 			.subscribe(
 				(result) => {
@@ -43,6 +45,7 @@ export class SignupComponent implements OnInit {
 					console.log(error);
 				},
 			);
+		*/
 	}
 
 }
