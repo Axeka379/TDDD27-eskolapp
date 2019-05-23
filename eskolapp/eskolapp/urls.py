@@ -67,12 +67,12 @@ urlpatterns = [
     #url(r'^boards/(?P<pk>\d+)/$', board_views.board_topics, name='board_topics'),
     #url(r'^boards/(?P<pk>\d+)/new/$', board_views.new_topic, name='new_topic'),
 
-    url(r'^chat/$', live_views.chat_home, name='chat_home'),
-    url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
+    #url(r'^chat/$', live_views.chat_home, name='chat_home'),
+    #url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
 
-    url(r'^create_new_server$', live_views.create_new_server, name='create_new_server'),
+    url(r'^create_new_server/$', live_views.create_new_server, name='create_new_server'),
 
-    url(r'^fetch_user_servers/$', live_views.fetch_user_servers, name='fetch_user_servers'),
+    url(r'^fetch_user_info/$', live_views.fetch_user_info, name='fetch_user_info'),
     url(r'^fetch_server_users/$', live_views.fetch_server_users, name='fetch_server_users'),
     url(r'^fetch_server_messages/$', live_views.fetch_server_messages, name='fetch_server_messages'),
 

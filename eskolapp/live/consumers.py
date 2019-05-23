@@ -26,8 +26,8 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             print('\033[0m')
 
         await self.accept()
-        await self.on_join(1) # server_id
-        await self.on_join(2)
+        #await self.on_join(1) # server_id
+        #await self.on_join(2)
 
     # On connection closing
     async def disconnect(self, close_code):
@@ -37,8 +37,18 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        await self.on_leave(1) # server_id
-        await self.on_leave(2)
+        #await self.on_leave(1) # server_id
+        #await self.on_leave(2)
+
+    # Send data to a group given a message type and data for that type
+    async def group_send(self, event):
+        await self.send_json({
+            'type': event['msg_type'],
+            'data': event['data']
+        })
+
+
+    ### Receiving data
 
     # Receive message from WebSocket: {type: string, ...}
     async def receive_json(self, json_data):
@@ -52,34 +62,64 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             print("Error in receive_json:", json_data)
 
 
+    # Receive message from room group
+    async def on_send_message(self, data):
+        try:
+            server_id = data['server_id']
+            content = data['content']
+        except KeyError:
+            return print('Error in on_send_message: Malformed data:', data)
+
+        if not isinstance(server_id, int) or not isinstance(content, str):
+            return print('Error in on_send_message: Malformed data:', data)
+
+        if not Server.objects.filter(pk=server_id).exists():
+            return print('Error in on_send_message: Server id not found:', server_id)
+        server = Server.objects.get(pk=server_id)
+
+        if not self.user.in_server(server):
+            return print('Error in on_send_message: User not in server')
+
+        if not (1 <= len(content) <= 2000):
+            return print('Error in on_send_message: Message too long or short')
+
+        message = Message.objects.create(
+            server = server,
+            user = self.user,
+            content = content,
+        )
+
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'group_send',
+                'msg_type': 'message',
+                'data': message.serialize()
+            }
+        )
+
+
+    # Separate: on_join_server, on_leave_server, on_online_status
+
+    """
     async def on_join(self, server_id):
-        # TODO: Add message to database and use values below
         msg_id = 1
         time_now = time.time() * 1000
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
-                'type': 'send_join',
-                'server_id': server_id,
-                'user_id': self.user.id,
-                'msg_id': msg_id,
-                'timestamp': time_now,
+                'type': 'group_send',
+                'msg_type': 'join',
+                'data': {
+                    'server_id': server_id,
+                    'user_id': self.user.id,
+                    'msg_id': msg_id,
+                    'timestamp': time_now,
+                }
             }
         )
-        await self.on_presence()
 
-    async def send_join(self, event):
-        await self.send_json({
-            'type': 'join',
-            'server_id': event['server_id'],
-            'user_id': event['user_id'],
-            'msg_id': event['msg_id'],
-            'timestamp': event['timestamp'],
-        })
-
-
-    #
     async def on_leave(self, server_id):
         # TODO: Add message to database and use values below
         msg_id = 1
@@ -97,80 +137,12 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         )
         await self.on_presence()
 
-    async def send_leave(self, event):
-        await self.send_json({
-            'type': 'leave',
-            'server_id': event['server_id'],
-            'user_id': event['user_id'],
-            'msg_id': event['msg_id'],
-            'timestamp': event['timestamp'],
-        })
-
-
-    # Receive message from room group
-    async def on_send_message(self, json_data):
-        # TODO: Add message to database and use values below
-        content = json_data.get('content', '<missing content>')
-        server_id = json_data.get('server_id', -1)
-        print(server_id)
-        server_id = 4
-        server = Server.objects.get(pk=server_id)
-        msg_id = 1
-        time_now = time.time() * 1000
-        message = Message.objects.create(
-            server=server,
-            user=self.user,
-            content=content,
-            content_html=content)
-
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'send_message',
-                'server_id': server_id,
-                'user_id': self.user.id,
-                'msg_id': msg_id,
-                'timestamp': time_now,
-                'content': content,
-            }
-        )
-
-    async def send_message(self, event):
-        await self.send_json({
-            'type': 'message',
-            'server_id': event['server_id'],
-            'user_id': event['user_id'],
-            'msg_id': event['msg_id'],
-            'timestamp': event['timestamp'],
-            'content': event['content'],
-        })
-
 
     async def on_presence(self):
         pass
-        """
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'send_presence',
-                'user_id': self.user.id,
-                'server': self.room_name
-            }
-        )
-        """
 
     async def send_presence(self, event):
         pass
-        """
-        await self.send_json({
-            'type': 'message',
-            'server_id': event['server_id'],
-            'user_id': event['user_id'],
-            'msg_id': event['msg_id'],
-            'timestamp': event['timestamp'],
-            'content': event['content'],
-        })
-        """
 
 
     async def on_fetch_server_users(self, server):
@@ -188,3 +160,4 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             'type: server_user_list'
             'user_id' : event['user_id']
         })
+    """
