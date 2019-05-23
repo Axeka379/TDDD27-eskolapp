@@ -130,16 +130,4 @@ export class ChatService {
 		message.type = "message";
 		this.messageList[message.server].push(message);
 	}
-
-
-	public test() {
-		this.data.fetchUsersFromServer(this.selectedServerId).subscribe(
-			result => { console.log('fetchUsersFromServer', result); },
-			error => { console.warn(error); }
-		);
-		this.data.fetchMessagesFromServer(this.selectedServerId).subscribe(
-			result => { console.log('fetchMessagesFromServer', result); },
-			error => { console.warn(error); }
-		);
-	}
 }

@@ -107,4 +107,29 @@ export class DataService {
 			this.httpOptions
 		);
 	}
+
+	createServerInvite(server_id) {
+		return this.http.post(
+			'/create_server_invite/',
+			{ server_id },
+			this.httpOptions
+		);
+	}
+
+	leaveServer(server_id) {
+		return this.http.post(
+			'/leave_server/',
+			{ server_id },
+			this.httpOptions
+		);
+	}
+
+	deleteServer(server_id) {
+		return this.http.post(
+			'/delete_server/',
+			{ server_id },
+			this.httpOptions
+		);
+	}
+
 }

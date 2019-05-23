@@ -7,6 +7,7 @@ import { LoginComponent } from '../auth/login/login.component';
 import { SignupComponent } from '../auth/signup/signup.component';
 import { LogoutComponent } from '../auth/logout/logout.component';
 import { ChatService } from "../chat/chat.service";
+import { DataService } from '../data.service';
 
 @Component({
 	selector: 'app-sidebar',
@@ -20,7 +21,8 @@ export class SidebarComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private modalService: NgbModal,
-		private chatService: ChatService
+		private chat: ChatService,
+		private data: DataService
 	) {
 		router.events
 			.pipe( filter( e => e instanceof NavigationEnd ) )
@@ -28,14 +30,12 @@ export class SidebarComponent implements OnInit {
 				this.currentUrl = event.url;
 			}
 		);
-
-		//console.log("Servers:", chatService.serverList);
 	}
 
 	ngOnInit() {}
 
 	private get serverList(): any {
-		return this.chatService.serverList;
+		return this.chat.serverList;
 	}
 
 
@@ -57,6 +57,9 @@ export class SidebarComponent implements OnInit {
 
 
 	test() {
-		this.chatService.test();
+		this.data.createServerInvite(this.chat.selectedServerId).subscribe(
+			result => { console.log('createServerInvite', result); },
+			error => { console.warn(error); }
+		);
 	}
 }
