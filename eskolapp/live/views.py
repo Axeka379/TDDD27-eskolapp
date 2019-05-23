@@ -2,64 +2,150 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.http import JsonResponse
-from rest_framework.response import Response
-
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import get_user_model
-from .serializers import ServerSerializer
-#from rest_framework import viewsets, permissions
-#from rest_framework import serializers
-
+from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from .models import Message, Server, User
 import json
 
-def chat_home(request):
-    return render(request, 'live/chat_home.html', {})
+from .serializers import ServerSerializer
+from .models import Message, Server, User, Membership
 
-def chat_room(request, room_name):
-    return render(request, 'live/chat_room.html', {
-        'room_name_json': mark_safe(json.dumps(room_name))
-    })
 
 @api_view(['POST'])
 def create_new_server(request):
-    server_name = request.data.get('server_name', None)
-    if server_name:
-        server = Server.objects.create(name=server_name, owner=request.user)
-        server.users.add(request.user)
-        return JsonResponse({"status":"created server"})
-    return JsonResponse({"status": "failed to create server"})
+    MAX_CREATED_SERVERS = 3
+    MAX_JOINED_SERVERS = 10
+
+    try:
+        server_name = request.data["server_name"]
+    except KeyError:
+        return HttpResponseBadRequest("Missing arguments.")
+
+    if not server_name or not isinstance(server_name, str) or len(server_name) > 30:
+        return HttpResponseBadRequest("Argument 'server_name' not accepted.")
+
+    if len(request.user.get_owned_servers()) > MAX_CREATED_SERVERS:
+        return HttpResponseBadRequest("Maximum owned servers exceeded.")
+
+    if len(request.user.get_joined_servers()) > MAX_JOINED_SERVERS:
+        return HttpResponseBadRequest("Maximum joined servers exceeded.")
+
+    # + Check if user is teacher
+
+    server = Server.objects.create(name=server_name, owner=request.user)
+    server.users.add(request.user)
+
+    return JsonResponse({
+        "server": server.serialize()
+    })
 
 @api_view(['POST'])
-def fetch_user_servers(request):
-    servers = Server.objects.filter(users=request.user)
+def create_server_invite(request):
+    # Check if server_id exists and is an integer
+    # Check if Server exists
+    # Check if user is in server (or owner)
+    # Check if follow server invitation rules
+    # Generate invite_url
+    # Store invite_url in InviteUrl model
+    # Set whether single-use or multiple-use
+    # return JsonResponse({"invite_url": invite_url})
+    ...
+
+@api_view(['POST'])
+def join_server(request):
+    # GET /invite/XXXXX
+    # Load InviteUrl model
+    # Remove instance if single-use
+    # Check if server still exists
+    # Check if not already in server
+    # Check for max number of users in server
+    # Check if max number of servers joined exceeded
+    # Add user to server
+    # Announce join via channels
+    # Return server.serialize()
+    ...
+
+@api_view(['POST'])
+def leave_server(request):
+    # Check if server_id exists and is an integer
+    # Check if Server exists
+    # Check if user is in server
+    # Check if user is not owner
+    # Remove user from server/memberships
+    # Announce leave via channels
+    # return JsonResponse({})
+    ...
+
+@api_view(['POST'])
+def delete_server(request):
+    # Check if server_id exists and is an integer
+    # Check if Server exists
+    # Check if user is in server
+    # Check if user is owner
+    # Require server name confirmation of sorts
+    # Remove server + make sure all memberships are updated
+    # Announce deletion via channels
+    # return JsonResponse({})
+    ...
+
+
+@api_view(['POST'])
+def fetch_user_info(request):
+    servers = request.user.get_joined_servers()
+
     return JsonResponse({
-        "servers": [{
-            "name": server.name,
-            "id": server.id
-        } for server in servers]
+        "user": request.user.serialize(),
+        "servers": [server.serialize() for server in servers]
     })
 
 @api_view(['POST'])
 def fetch_server_users(request, format=None):
-    if request.method == 'POST':
-        server_id = request.data.get("server_id", -1)
-        users = User.objects.filter(server__id=server_id)
+    try:
+        server_id = request.data["server_id"]
+    except KeyError:
+        return HttpResponseBadRequest("Missing arguments.")
 
-        return JsonResponse({"users": [user.username for user in users]})
-    return JsonResponse({"status":"failed to fetch server users"})
+    if not isinstance(server_id, int):
+        return HttpResponseBadRequest("Argument 'server_id' not accepted.")
+
+    if not Server.objects.filter(pk=server_id).exists():
+        return HttpResponseBadRequest("Server not found.")
+    server = Server.objects.get(pk=server_id)
+
+    if not request.user.in_server(server):
+        return HttpResponseBadRequest("User not in server.")
+
+    users = server.users.all()
+
+    return JsonResponse({
+        "users": [user.serialize() for user in users]
+    })
 
 @api_view(['POST'])
 def fetch_server_messages(request):
-    if request.method == 'POST':
-        server_id = request.data.get("server_id", -1)
-        messages = Message.objects.filter(server__id=server_id)
-        print(Server.objects.get(pk=server_id))
-        return JsonResponse({
-            "messages": [{
-                "user": message.user.username,
-                "content": message.content
-            } for message in messages]
-        })
-    return JsonResponse({"status":"failed to fetch messages "})
+    MESSAGE_HISTORY = 10
+
+    try:
+        server_id = request.data["server_id"]
+    except KeyError:
+        return HttpResponseBadRequest("Missing arguments.")
+
+    if not isinstance(server_id, int):
+        return HttpResponseBadRequest("Argument 'server_id' not accepted.")
+
+    if not Server.objects.filter(pk=server_id).exists():
+        return HttpResponseBadRequest("Server not found.")
+    server = Server.objects.get(pk=server_id)
+
+    if not request.user.in_server(server):
+        return HttpResponseBadRequest("User not in server.")
+
+    messages = server.messages.all().order_by('-id')[:MESSAGE_HISTORY]
+    messages = reversed(messages)
+
+    # Optional message id to reach further in history
+ 
+    return JsonResponse({
+        "messages": [message.serialize() for message in messages]
+    })
