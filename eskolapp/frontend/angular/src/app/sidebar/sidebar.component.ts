@@ -3,9 +3,10 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateRoomFormComponent } from '../create-room-form/create-room-form.component';
-import { LoginComponent } from '../authentication/login/login.component';
-import { SignupComponent } from '../authentication/signup/signup.component';
-import { ChatService } from "../chat.service";
+import { LoginComponent } from '../auth/login/login.component';
+import { SignupComponent } from '../auth/signup/signup.component';
+import { LogoutComponent } from '../auth/logout/logout.component';
+import { ChatService } from "../chat/chat.service";
 
 @Component({
 	selector: 'app-sidebar',
@@ -16,7 +17,11 @@ export class SidebarComponent implements OnInit {
 
 	currentUrl: string;
 
-	constructor(private router: Router, private modalService: NgbModal, private chatService: ChatService) {
+	constructor(
+		private router: Router,
+		private modalService: NgbModal,
+		private chatService: ChatService
+	) {
 		router.events
 			.pipe( filter( e => e instanceof NavigationEnd ) )
 			.subscribe( (event: NavigationEnd) => {
@@ -29,10 +34,13 @@ export class SidebarComponent implements OnInit {
 
 	ngOnInit() {}
 
+	private get serverList(): any {
+		return this.chatService.serverList;
+	}
+
+
 	openCreateRoomModal() {
-		console.log("Creating server");
-		this.chatService.postTest();
-		//this.modalService.open(CreateRoomFormComponent);
+		this.modalService.open(CreateRoomFormComponent);
 	}
 
 	openLoginModal() {
@@ -43,8 +51,12 @@ export class SidebarComponent implements OnInit {
 		this.modalService.open(SignupComponent);
 	}
 
-	private get serverList(): any {
-		return this.chatService.serverList;
+	openLogoutModal() {
+		this.modalService.open(LogoutComponent);
 	}
 
+
+	test() {
+		this.chatService.test();
+	}
 }

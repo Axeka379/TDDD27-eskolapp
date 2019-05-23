@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UsersComponent } from './users/users.component';
-import { DetailsComponent } from './details/details.component';
-import { PostsComponent } from './posts/posts.component';
-import { ChatWindowComponent } from './chat-window/chat-window.component';
+import { ChatWindowComponent } from './chat/chat-window/chat-window.component';
 
 const routes: Routes = [
 	{
@@ -13,19 +10,6 @@ const routes: Routes = [
 	{
 		path: 'chat/:server_id',
 		component: ChatWindowComponent
-	},
-
-	{
-		path: 'details/:id',
-		component: DetailsComponent
-	},
-	{
-		path: 'posts',
-		component: PostsComponent
-	},
-	{
-		path: 'users',
-		component: UsersComponent
 	},
 	{
 		path: '**',

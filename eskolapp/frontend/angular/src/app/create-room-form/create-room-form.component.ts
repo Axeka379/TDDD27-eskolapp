@@ -18,9 +18,14 @@ export class CreateRoomFormComponent implements OnInit {
 	ngOnInit() {}
 
 	onSubmit(formData): void {
-		let name = formData.form.value.serverName;
+		let server_name = formData.form.value.serverName;
 
-		this.data.createServer(name);
-		this.activeModal.close();
+		this.data.createServer(server_name).subscribe(
+			result => {
+				console.log('createServer', result);
+				this.activeModal.close();
+			},
+			error => { console.warn(error); }
+		);
 	}
 }

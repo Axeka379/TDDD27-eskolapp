@@ -2,6 +2,7 @@
 	<ul>
 		<li *ngFor="let server of serverList">
 			<a routerLink="/chat/{{ server.id }}">
+				<i class="material-icons">chat</i>
 				{{server.name}}
 			</a>
 
@@ -27,20 +28,21 @@
 				</div>
 			</a>
 		</li>
-		<li>
-			<a routerLink="posts" [class.activated]="currentUrl == '/posts'">
-				<i class="material-icons">assignment</i>
-			</a>
-		</li>
 		-->
-		<li>
-			<a routerLink="users" [class.activated]="currentUrl == '/users'">
-				<i class="material-icons">people</i>
-			</a>
-		</li>
+
+		<hr style="border-top: 1px solid gray;">
+
 		<li>
 			<a (click)="openCreateRoomModal()">
 				<i class="material-icons">add_box</i>
+				create
+			</a>
+		</li>
+
+		<li>
+			<a (click)="test()">
+				<i class="material-icons">record_voice_over</i>
+				test
 			</a>
 		</li>
 
@@ -49,11 +51,19 @@
 		<li>
 			<a (click)="openLoginModal()">
 				<i class="material-icons">vpn_key</i>
+				login
 			</a>
 		</li>
 		<li>
 			<a (click)="openSignupModal()">
 				<i class="material-icons">assignment_ind</i>
+				signup
+			</a>
+		</li>
+		<li>
+			<a (click)="openLogoutModal()">
+				<i class="material-icons">exit_to_app</i>
+				log out
 			</a>
 		</li>
 	</ul>

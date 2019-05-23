@@ -16,8 +16,8 @@ export class ChatFormComponent implements OnInit {
 	}
 
 	onSubmit($event, formData): void {
-		let message = formData.form.value.chatInput;
 		$event.preventDefault();
+		let message = formData.form.value.chatInput;
 		formData.reset();
 		this.chatService.sendMessage(message);
 	}

@@ -25,6 +25,15 @@ export class SignupComponent implements OnInit {
 	ngOnInit() {}
 
 	onSubmit() {
+		/*this.data.register(...).subscribe(
+			result => {
+				console.log('Registered!');
+				login!!
+				this.activeModal.close();
+			},
+			error => { console.warn(error); }
+		);*/
+
 		this.http.post('http://127.0.0.1:8000/register/', this.form)
 			.subscribe(
 				(result) => {

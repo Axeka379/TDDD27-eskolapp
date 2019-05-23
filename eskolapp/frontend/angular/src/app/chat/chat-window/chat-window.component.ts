@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService } from "../chat.service";
-import { WebsocketService } from "../websocket.service";
 
 @Component({
 	selector: 'app-chat-window',
@@ -17,13 +16,14 @@ export class ChatWindowComponent implements OnInit {
 		this.route.params.subscribe(
 			(params) => {
 				if (params.server_id) {
-					this.chatService.selectedServerId = params.server_id;
+					this.chatService.selectedServerId = parseInt(params.server_id);
 				}
 			}
 		);
 	}
 
 	ngOnInit() {
+		/*
 		this.chatService.onMessage$.subscribe(
 			// Called whenever there is a message from the chat service.
 			(msg) => {
@@ -40,6 +40,7 @@ export class ChatWindowComponent implements OnInit {
 				console.log('chat window close');
 			}
 		);
+		*/
 	}
 
 	public get messages(): any {

@@ -1,0 +1,25 @@
+<div>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Log out</h4>
+		<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<form
+		ngNativeValidate
+		#myForm="ngForm"
+		(ngSubmit)="onSubmit(myForm)">
+		<div class="modal-body">
+			<h4>Are you sure?</h4>
+		</div>
+		<div class="modal-footer">
+			<button
+				type="submit"
+				class="btn btn-outline-dark">Log out</button>
+		</div>
+	</form>
+
+</div>
+
