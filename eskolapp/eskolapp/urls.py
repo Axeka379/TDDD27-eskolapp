@@ -36,6 +36,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path(r'', include('frontend.urls')),
 
+    url(r'^register/$', live_views.CreateUserView.as_view(), name='register'),
+
     #url(r'^$', frontend_views.index, name='home'),
 
     #Django rest-api token

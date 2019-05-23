@@ -3,12 +3,63 @@ from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+from rest_framework import permissions
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 import json
 
-from .serializers import ServerSerializer
+from .serializers import ServerSerializer, UserSerializer
 from .models import Message, Server, User, Membership, Invitation
+
+from rest_framework import status
+from rest_framework.generics import CreateAPIView
+from rest_framework.response import Response
+from rest_framework_jwt.settings import api_settings
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+
+jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+
+class CreateUserView(CreateAPIView):
+
+    model = get_user_model()
+    authentication_classes = []
+    permission_classes = [
+        permissions.AllowAny # Or anon users can't register
+    ]
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        user = self.model.objects.all().get(username=serializer.data['username'])
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+        """return Response(
+            {
+                'confirmation_url': reverse(
+                    'activate-user', args=[token], request=request
+                )
+            },
+            status=status.HTTP_201_CREATED, headers=headers
+        )"""
+        return JsonResponse({
+            "success": True
+        })
+
+"""
+class CreateUserView(CreateAPIView):
+
+    model = get_user_model()
+    permission_classes = [
+        #permissions.AllowAny # Or anon users can't register
+    ]
+    serializer_class = UserSerializer
+"""
 
 
 @api_view(['POST'])

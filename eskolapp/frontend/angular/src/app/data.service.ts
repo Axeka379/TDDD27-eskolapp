@@ -59,8 +59,13 @@ export class DataService {
 		localStorage.setItem("token", null);
 	}
 
-	register() {
-		console.log("not implemented yet");
+	register(form) {
+		console.log({ 'username': form.username, 'password': form.password1 },);
+		return this.http.post(
+			'/register/',
+			{ 'username': form.username, 'password': form.password1, 'email': form.email },
+			this.httpOptions
+		);
 	}
 
 	resetPassword() {
