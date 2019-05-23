@@ -71,6 +71,8 @@ urlpatterns = [
     #url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
 
     url(r'^create_new_server/$', live_views.create_new_server, name='create_new_server'),
+    url(r'^create_server_invite/$', live_views.create_server_invite, name='create_server_invite'),
+    url(r'^join_server/$', live_views.join_server, name='join_server'),
 
     url(r'^fetch_user_info/$', live_views.fetch_user_info, name='fetch_user_info'),
     url(r'^fetch_server_users/$', live_views.fetch_server_users, name='fetch_server_users'),

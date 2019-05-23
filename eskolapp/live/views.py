@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import get_user_model
@@ -9,8 +8,12 @@ from rest_framework.decorators import api_view, permission_classes
 import json
 
 from .serializers import ServerSerializer
-from .models import Message, Server, User, Membership
+from .models import Message, Server, User, Membership, Invitation
 
+
+@api_view(['POST'])
+def register_new_user(request): #register
+    pass
 
 @api_view(['POST'])
 def create_new_server(request):
@@ -42,15 +45,28 @@ def create_new_server(request):
 
 @api_view(['POST'])
 def create_server_invite(request):
-    # Check if server_id exists and is an integer
-    # Check if Server exists
-    # Check if user is in server (or owner)
+
     # Check if follow server invitation rules
-    # Generate invite_url
-    # Store invite_url in InviteUrl model
-    # Set whether single-use or multiple-use
-    # return JsonResponse({"invite_url": invite_url})
-    ...
+    try:
+        server_id = request.data["server_id"]
+    except KeyError:
+        return HttpResponseBadRequest("Missing arguments.")
+
+    if not isinstance(server_id, int):
+        return HttpResponseBadRequest("Argument 'server_id' not accepted.")
+
+    if not Server.objects.filter(pk=server_id).exists():
+        return HttpResponseBadRequest("Server not found.")
+    server = Server.objects.get(pk=server_id)
+
+    if not request.user.in_server(server):
+        return HttpResponseBadRequest("User not in server.")
+
+
+    invitation_link = Invitation.objects.create(server=server,creator=request.user, is_private=False)
+
+
+    return JsonResponse({"invite_url": invitation_link.key})
 
 @api_view(['POST'])
 def join_server(request):
@@ -64,7 +80,25 @@ def join_server(request):
     # Add user to server
     # Announce join via channels
     # Return server.serialize()
-    ...
+    try:
+        key = request.data["key"]
+    except KeyError:
+        return HttpResponseBadRequest("Missing arguments.")
+
+    if not isinstance(key, str):
+        return HttpResponseBadRequest("Argument 'key' not accepted.")
+
+    if not Invitation.objects.filter(key=key).exists():
+        return HttpResponseBadRequest("key not found.")
+
+    invitation = Invitation.objects.get(key=key)
+
+    if request.user.in_server(invitation.server):
+        return HttpResponseBadRequest("User already joined.")
+
+    invitation.server.users.add(request.user)
+
+    return JsonResponse({"server": invitation_link.server.serialize})
 
 @api_view(['POST'])
 def leave_server(request):
@@ -88,6 +122,7 @@ def delete_server(request):
     # Announce deletion via channels
     # return JsonResponse({})
     ...
+
 
 
 @api_view(['POST'])
@@ -125,7 +160,6 @@ def fetch_server_users(request, format=None):
 @api_view(['POST'])
 def fetch_server_messages(request):
     MESSAGE_HISTORY = 10
-
     try:
         server_id = request.data["server_id"]
     except KeyError:
@@ -143,9 +177,8 @@ def fetch_server_messages(request):
 
     messages = server.messages.all().order_by('-id')[:MESSAGE_HISTORY]
     messages = reversed(messages)
-
     # Optional message id to reach further in history
- 
+
     return JsonResponse({
         "messages": [message.serialize() for message in messages]
     })

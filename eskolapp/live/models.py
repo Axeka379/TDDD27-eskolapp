@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-
+from django.utils.crypto import get_random_string
 
 # Create your models here.
 
@@ -72,6 +72,11 @@ class Membership(models.Model):
     class Meta:
         unique_together = ("user", "server")
 
+class Invitation(models.Model):
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, related_name="invitations")
+    key = models.CharField(max_length=12, default=get_random_string, unique=True)
+    is_private = models.BooleanField()
 
 class MembershipInline(admin.TabularInline):
     model = Membership
