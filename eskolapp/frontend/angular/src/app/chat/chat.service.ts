@@ -31,6 +31,11 @@ export class ChatService {
 
 		this.messageSubject = new Subject<any>();
 
+		this.fetchUserInfo();
+	}
+
+
+	private connectSocket() {
 		this.socket.subject.subscribe(
 			// Called whenever there is a message from the server.
 			(msg) => {
@@ -46,10 +51,7 @@ export class ChatService {
 				console.warn('connection closed');
 			}
 		);
-
-		this.fetchUserInfo();
 	}
-
 
 	private fetchUserInfo() {
 		this.data.fetchUserInfo().subscribe(
@@ -61,6 +63,7 @@ export class ChatService {
 					let server = result.servers[i];
 					this.addServer(new Server(server));
 				}
+				this.connectSocket();
 			}
 		);
 	}
@@ -83,6 +86,10 @@ export class ChatService {
 		this.fetchMessages(server.id);
 	}
 
+	private addMessage(message) {
+		message.type = "message";
+		this.messageList[message.server].push(message);
+	}
 
 
 	public get messages(): any {
@@ -101,13 +108,11 @@ export class ChatService {
 			})
 		);*/
 
-		this.socket.send(
-			{
-				"type": "message",
-				"server_id": this.selectedServerId,
-				"content": content
-			}
-		);
+		this.socket.send({
+			"type": "message",
+			"server_id": this.selectedServerId,
+			"content": content
+		});
 	}
 
 
@@ -126,8 +131,4 @@ export class ChatService {
 		}
 	}
 
-	private addMessage(message) {
-		message.type = "message";
-		this.messageList[message.server].push(message);
-	}
 }

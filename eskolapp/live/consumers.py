@@ -25,7 +25,7 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
             print('sudo docker run -p 6379:6379 -d redis:2.8')
             print('\033[0m')
 
-        await self.accept()
+        await self.accept("JWT")
         #await self.on_join(1) # server_id
         #await self.on_join(2)
 
@@ -76,9 +76,6 @@ class ChatConsumer(AsyncJsonWebsocketConsumer):
         if not Server.objects.filter(pk=server_id).exists():
             return print('Error in on_send_message: Server id not found:', server_id)
         server = Server.objects.get(pk=server_id)
-
-        if not self.user.in_server(server):
-            return print('Error in on_send_message: User not in server')
 
         if not (1 <= len(content) <= 2000):
             return print('Error in on_send_message: Message too long or short')
