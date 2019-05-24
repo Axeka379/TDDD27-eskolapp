@@ -96,8 +96,6 @@ def create_new_server(request):
 
 @api_view(['POST'])
 def create_server_invite(request):
-
-    # Check if follow server invitation rules
     try:
         server_id = request.data["server_id"]
     except KeyError:
@@ -113,6 +111,7 @@ def create_server_invite(request):
     if not request.user.in_server(server):
         return HttpResponseBadRequest("User not in server.")
 
+    # Check if follow server invitation rules
 
     invitation_link = Invitation.objects.create(server=server,creator=request.user, is_private=False)
 
@@ -143,13 +142,17 @@ def join_server(request):
         return HttpResponseBadRequest("key not found.")
 
     invitation = Invitation.objects.get(key=key)
+    server = invitation.server
 
-    if request.user.in_server(invitation.server):
+    if request.user.in_server(server):
         return HttpResponseBadRequest("User already joined.")
 
-    invitation.server.users.add(request.user)
+    # Check invitation is_private and remove if accordingly
 
-    return JsonResponse({"server": invitation_link.server.serialize})
+    server.users.add(request.user)
+    invitation.delete()
+
+    return JsonResponse({"server": server.serialize()})
 
 @api_view(['POST'])
 def leave_server(request):
