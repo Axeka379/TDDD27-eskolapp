@@ -39,27 +39,10 @@ class CreateUserView(CreateAPIView):
         user = self.model.objects.all().get(username=serializer.data['username'])
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
-        """return Response(
-            {
-                'confirmation_url': reverse(
-                    'activate-user', args=[token], request=request
-                )
-            },
-            status=status.HTTP_201_CREATED, headers=headers
-        )"""
+
         return JsonResponse({
             "success": True
         })
-
-"""
-class CreateUserView(CreateAPIView):
-
-    model = get_user_model()
-    permission_classes = [
-        #permissions.AllowAny # Or anon users can't register
-    ]
-    serializer_class = UserSerializer
-"""
 
 
 @api_view(['POST'])
@@ -139,7 +122,7 @@ def join_server(request):
         return HttpResponseBadRequest("Argument 'key' not accepted.")
 
     if not Invitation.objects.filter(key=key).exists():
-        return HttpResponseBadRequest("key not found.")
+        return HttpResponseBadRequest("Key not found.")
 
     invitation = Invitation.objects.get(key=key)
     server = invitation.server

@@ -42,10 +42,6 @@ import { TokenInterceptor } from './auth/token.interceptor';
 	],
 	providers: [
 		{
-			provide: LocationStrategy,
-			useClass: HashLocationStrategy
-		},
-		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: TokenInterceptor,
 			multi: true

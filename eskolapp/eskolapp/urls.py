@@ -14,104 +14,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from django.conf.urls import url
-from django.contrib.auth import views as auth_views
 from django.urls import include, path
+from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 
-
-from accounts.views import (
-    LoginView, LogoutView, UserDetailsView, PasswordChangeView,
-    PasswordResetView, PasswordResetConfirmView
-)
-
-#from accounts import views as accounts_views
-from chat import views as board_views
-from chat import views
-from live import views as live_views
+from frontend import views as frontend_views
 
 
 urlpatterns = [
+    url(r'^$', frontend_views.index, name='index'),
     path('admin/', admin.site.urls),
-    path(r'', include('frontend.urls')),
 
-    url(r'^register/$', live_views.CreateUserView.as_view(), name='register'),
-
-    #url(r'^$', frontend_views.index, name='home'),
-
-    #Django rest-api token
     url(r'^api-token-auth/', obtain_jwt_token),
     url(r'^api-token-verify/', verify_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
 
+    path(r'', include('live.urls')),
 
-    # URLs that do not require a session or valid token
-    #url(r'^password/reset/$', PasswordResetView.as_view(), name='password_reset'),
-    #url(r'^password/reset/confirm/$', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    #url(r'^login/$', LoginView.as_view(), name='login'),
-    #url(r'^register/', include('rest_auth.registration.urls')),
-    # URLs that require a user to be logged in with a valid session / token.
-    #url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    #url(r'^user/$', UserDetailsView.as_view(), name='user_details'),
-    #url(r'^password/change/$', PasswordChangeView.as_view(), name='password_change'),
-
-
-
-    #url(r'^chat/$', live_views.chat_home, name='chat_home'),
-    #url(r'^chat/new_server/$', live_views.new_server, name='new_server'),
-    #url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
-
-    #url(r'^signup/$', accounts_views.signup, name='signup'),
-    #url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
-    url(r'^login/$', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-
-    #url(r'^boards/(?P<pk>\d+)/$', board_views.board_topics, name='board_topics'),
-    #url(r'^boards/(?P<pk>\d+)/new/$', board_views.new_topic, name='new_topic'),
-
-    #url(r'^chat/$', live_views.chat_home, name='chat_home'),
-    #url(r'^chat/(?P<room_name>[^/]+)/$', live_views.chat_room, name='chat_room'),
-
-    url(r'^create_new_server/$', live_views.create_new_server, name='create_new_server'),
-    url(r'^create_server_invite/$', live_views.create_server_invite, name='create_server_invite'),
-    url(r'^join_server/$', live_views.join_server, name='join_server'),
-
-    url(r'^fetch_user_info/$', live_views.fetch_user_info, name='fetch_user_info'),
-    url(r'^fetch_server_users/$', live_views.fetch_server_users, name='fetch_server_users'),
-    url(r'^fetch_server_messages/$', live_views.fetch_server_messages, name='fetch_server_messages'),
-
-
-#    url(r'^live/new_server/$', live_views.new_server, name='new_server'),
-#    url(r'^live/users/$', live_views.getUser, name='fetch_server_users'),
-#
-#    path('admin/', admin.site.urls),
-#    url('^reset/$',
-#        auth_views.PasswordResetView.as_view(
-#            template_name='password_reset.html',
-#            email_template_name='password_reset_email.html',
-#            subject_template_name='password_reset_subject.txt'
-#        ),
-#        name='password_reset'),
-#    url(r'^reset/done/$',
-#        auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'),
-##    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-#        auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),
-#        name='password_reset_confirm'),
-#    url(r'^reset/complete/$',
-##        auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'),
-#        name='password_reset_complete'),
-    #url(r'^settings/password/$',
-#        auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
-#        name='password_change'),
-#    url(r'^settings/password/done/$',
-#        auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
-#        name='password_change_done'),
-#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$', views.topic_posts,
-#        name='topic_posts'),
-#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic,
-#        name='reply_topic'),
-#    url(r'^boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
-#        views.PostUpdateView.as_view(),
-#        name='edit_post'),
-
+    url(r'^.*/$', frontend_views.index), # Redirect unknown urls to angular
 ]
