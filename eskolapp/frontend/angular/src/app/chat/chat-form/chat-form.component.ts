@@ -1,5 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ChatService } from "../chat.service";
+import { DataService } from '../../data.service';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {Createinvitationlink} from '../../create-invitation-link/create-invitation-link.component';
+
 
 @Component({
 	selector: 'app-chat-form',
@@ -7,19 +11,23 @@ import { ChatService } from "../chat.service";
 	styleUrls: ['./chat-form.component.scss']
 })
 export class ChatFormComponent implements OnInit {
-	//@ViewChild("chatInput") chatInput: ElementRef;
 
-	constructor(private chatService: ChatService) { }
+	constructor(private chatService: ChatService,
+				private modalService: NgbModal,
+				private data: DataService,
+				private chat: ChatService) {}
 
-	ngOnInit() {
-		//this.chatInput.nativeElement.focus();
-	}
+	ngOnInit() {}
 
 	onSubmit($event, formData): void {
 		$event.preventDefault();
 		let message = formData.form.value.chatInput;
 		formData.reset();
 		this.chatService.sendMessage(message);
+	}
+
+	openCreateInvitationLinkModal() {
+		this.modalService.open(Createinvitationlink);
 	}
 
 }

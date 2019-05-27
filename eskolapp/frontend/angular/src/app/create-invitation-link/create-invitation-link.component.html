@@ -1,0 +1,10 @@
+<div>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Invitation link to server</h4>
+		<button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<input type="text" value="link()" [(ngModel)]="invitation_link" #userinput>
+     <button (click)="copyInputMessage(userinput)" value="click to copy" >Copy invitation link</button>
+</div>

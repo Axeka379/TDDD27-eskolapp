@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { ChatFormComponent } from './chat-form/chat-form.component';
 
+//import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 import { ChatService } from './chat.service';
 
 

@@ -17,6 +17,7 @@ import { WebsocketService } from './websocket.service';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { TokenInterceptor } from './auth/token.interceptor';
+import { Createinvitationlink } from './create-invitation-link/create-invitation-link.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { TokenInterceptor } from './auth/token.interceptor';
 		AppComponent,
 		SidebarComponent,
 		CreateServerFormComponent,
-		JoinServerFormComponent
+		JoinServerFormComponent,
+		Createinvitationlink
 	],
 	imports: [
 		BrowserModule,
@@ -52,6 +54,7 @@ import { TokenInterceptor } from './auth/token.interceptor';
 	entryComponents: [
 		CreateServerFormComponent,
 		JoinServerFormComponent,
+		Createinvitationlink,
 	]
 })
 export class AppModule { }
