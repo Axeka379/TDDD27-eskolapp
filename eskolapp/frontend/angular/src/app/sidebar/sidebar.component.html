@@ -1,7 +1,7 @@
 <nav>
 	<ul>
 		<li *ngFor="let server of serverList">
-			<a routerLink="/chat/{{ server.id }}">
+			<a routerLink="/chat/{{ server.id }}" [class.activated]="currentUrl == '/chat/'+server.id">
 				<i class="material-icons">chat</i>
 				{{server.name}}
 			</a>
