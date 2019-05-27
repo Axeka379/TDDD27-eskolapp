@@ -61,7 +61,7 @@ export class ChatService {
 
 				for (let i=0; i<result.servers.length; i++) {
 					let server = result.servers[i];
-					this.addServer(new Server(server));
+					this.addServer(server);
 				}
 				this.connectSocket();
 			}
@@ -79,11 +79,15 @@ export class ChatService {
 		);
 	}
 
-	private addServer(server: Server) {
+	public addServer(server_data: any) {
+		let server = new Server(server_data);
 		console.log(server);
+
 		this.serverList.push(server);
 		this.messageList[server.id] = [];
 		this.fetchMessages(server.id);
+
+		return server;
 	}
 
 	private addMessage(message) {
