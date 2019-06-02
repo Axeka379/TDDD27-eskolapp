@@ -57,7 +57,6 @@ export class ChatService {
 		this.data.fetchUserInfo().subscribe(
 			(result: {'user': any, 'servers': any}) => {
 				this.user = new User(result.user);
-				console.log(this.user);
 
 				for (let i=0; i<result.servers.length; i++) {
 					let server = result.servers[i];
@@ -122,7 +121,6 @@ export class ChatService {
 
 	private onData(message) {
 		let type = message.type;
-		console.log(message);
 
 		if (type == 'message') {
 			this.addMessage(new Message(message.data));

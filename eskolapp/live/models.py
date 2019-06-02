@@ -58,7 +58,7 @@ class Message(models.Model):
         return {
             'id': self.id,
             'server': self.server.id,
-            'user': self.user.id,
+            'user': self.user.username,
             'content': self.content,
             'created': self.created.timestamp() * 1000,
             'updated': self.updated.timestamp() * 1000,
