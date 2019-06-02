@@ -1,5 +1,14 @@
 # Eskolapp
 
+### Screencast link
+
+**Link:** https://drive.google.com/open?id=1ztNQFg3gtzgIxFmC718Aap1lcLCiF5u6 (Will be updated since youtube was down when this was supposed to be uploadaed)
+
+The screencast show the basic functionality that is available in the client.
+
+The user can register/sign up and then create a chat room to communicate in. An invitaiton link can also be created in order to invite other users to the room. The chat room supports live chatting with all other users in the room in a similar fashion to how discord is used. If the user logs out and logs in again at a later time the messages previous messages will be loaded and displayed. A user can be part of several servers and a server can of course support many users.  
+
+
 #### Private live online teaching system prototype for _TDDD27_
 **LIU-ID: _axeka379_**
 

@@ -24,53 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-"""
-UserModel = get_user_model()
-
-class UserSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(write_only=True)
-
-    def create(self, validated_data):
-        print('-'*20)
-        print('create', validated_data)
-
-        user = UserModel.objects.create(
-            username=validated_data['username']
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-
-        return user
-
-    class Meta:
-        model = UserModel
-        # Tuple of serialized model fields (see link [2])
-        #fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
-        fields = ('id', 'username', 'password')
-        write_only_fields = ('password',)
-        read_only_fields = ('id',)
-"""
-
-
-"""
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name', 'last_name')
-"""
-
 class ServerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Server
         fields = ('name', 'owner', 'users')
-
-"""
-class BlogPostSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(many=False)
-
-    class Meta:
-        model = BlogPost
-        fields = ('id', 'user', 'date', 'body')
-"""

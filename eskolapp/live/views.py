@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils.safestring import mark_safe
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth import get_user_model
@@ -103,16 +102,6 @@ def create_server_invite(request):
 
 @api_view(['POST'])
 def join_server(request):
-    # GET /invite/XXXXX
-    # Load InviteUrl model
-    # Remove instance if single-use
-    # Check if server still exists
-    # Check if not already in server
-    # Check for max number of users in server
-    # Check if max number of servers joined exceeded
-    # Add user to server
-    # Announce join via channels
-    # Return server.serialize()
     try:
         key = request.data["key"]
     except KeyError:

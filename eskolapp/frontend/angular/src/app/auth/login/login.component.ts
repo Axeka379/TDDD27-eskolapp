@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit {
 				localStorage.setItem("token", result.token);
 				this.activeModal.close();
 			},
-			error => { console.warn(error); }
+			error => { console.warn(error);
+			}
+
 		);
 	}
 

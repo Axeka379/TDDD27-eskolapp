@@ -1,12 +1,12 @@
 export class Message {
 	private _id: number;
 	private _server: number;
-	private _user: number;
+	private _user: string;
 	private _content: string;
 	private _created: number;
 	private _updated: number;
 
-	constructor(message: { id:number, server:number, user:number, content:string, created:number, updated:number }) {
+	constructor(message: { id:number, server:number, user:string, content:string, created:number, updated:number }) {
 		this._id = message.id;
 		this._server = message.server;
 		this._user = message.user;
@@ -25,7 +25,7 @@ export class Message {
 	}
 
 	public get user() {
-		return "Name#" + this._user;
+		return this._user;
 	}
 
 	public get content() {
