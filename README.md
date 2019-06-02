@@ -8,6 +8,8 @@ The screencast show the basic functionality that is available in the client.
 
 The user can register/sign up and then create a chat room to communicate in. An invitaiton link can also be created in order to invite other users to the room. The chat room supports live chatting with all other users in the room in a similar fashion to how discord is used. If the user logs out and logs in again at a later time the messages previous messages will be loaded and displayed. A user can be part of several servers and a server can of course support many users.  
 
+**Link** https://drive.google.com/open?id=1Beb2OaSRUYaPmiQuxAykjh4dsTeyxgY7
+This second screencast shows a code example of how the server creation funcions. First the server modell is shown and how it is created in the views in the backend using django. Then it is also shown how it is called from in the frontend with angular.
 
 #### Private live online teaching system prototype for _TDDD27_
 **LIU-ID: _axeka379_**
