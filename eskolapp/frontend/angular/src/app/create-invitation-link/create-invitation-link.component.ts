@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataService } from '../data.service';
-//import { ChatService } from '../chat.service';
 import { ChatService } from "../chat/chat.service";
 
 
@@ -16,12 +15,12 @@ export class Createinvitationlink implements OnInit {
 	constructor(
 		public activeModal: NgbActiveModal,
 		private data: DataService,
-		private chat: ChatService,
+		private chat: ChatService
 	) {}
 
 	ngOnInit() {
 				this.data.createServerInvite(this.chat.selectedServerId).subscribe(
-			result => {
+			(result: {'invite_url': any}) => {
 				console.log('createServerInvite', result);
 				this.invitation_link = result.invite_url;
 			 },

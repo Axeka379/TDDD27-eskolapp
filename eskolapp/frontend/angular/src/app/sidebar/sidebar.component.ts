@@ -59,12 +59,4 @@ export class SidebarComponent implements OnInit {
 	openLogoutModal() {
 		this.modalService.open(LogoutComponent);
 	}
-
-
-	test() {
-		this.data.createServerInvite(this.chat.selectedServerId).subscribe(
-			result => { console.log('createServerInvite', result); },
-			error => { console.warn(error); }
-		);
-	}
 }
