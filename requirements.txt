@@ -17,7 +17,7 @@ django-allauth==0.39.1
 django-cors-headers==3.0.0
 django-rest-auth==0.9.5
 django-widget-tweaks==1.4.3
-djangorestframework==3.9.4
+djangorestframework==3.11.2
 djangorestframework-jwt==1.11.0
 hiredis==1.0.0
 hyperlink==18.0.0
